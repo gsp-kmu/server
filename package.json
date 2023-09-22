@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hyeonseokang/Test_Server.git"
+    "url": "git+https://github.com/gsp-kmu/server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hyeonseokang/Test_Server/issues"
+    "url": "https://github.com/gsp-kmu/server/issues"
   },
-  "homepage": "https://github.com/hyeonseokang/Test_Server#readme",
+  "homepage": "https://github.com/gsp-kmu/server#readme",
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
