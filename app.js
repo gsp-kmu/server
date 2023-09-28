@@ -1,4 +1,5 @@
 const express = require('express');
+const webSocket = require('./socket');
 const MainService = require('./src/MainController');
 const app = express();
 
@@ -11,6 +12,8 @@ app.use('/', (req, res) => {
     res.send('test');
 });
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 대기중');
 });
+
+webSocket(server);
