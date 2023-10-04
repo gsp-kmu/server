@@ -18,7 +18,7 @@ module.exports = class Deck extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Deck.belongsTo(db.User, { foreignKey: 'UserId', targetKey: 'id'});
+        db.Deck.belongsTo(db.Account, { foreignKey: 'UserId', targetKey: 'id'});
         db.Deck.belongsToMany(db.Card, { through: 'DeckCard' });
     }
 }
