@@ -1,5 +1,6 @@
 const { STRING } = require('sequelize');
 const Sequelize = require('sequelize');
+const Info = require("../src/common/Info");
 
 module.exports = class UserState extends Sequelize.Model {
     static init(sequelize) {
@@ -11,9 +12,9 @@ module.exports = class UserState extends Sequelize.Model {
             },
             state:{
                 type: Sequelize.ENUM(
-                    'JOIN',
-                    'MATCH',
-                    'GAME',
+                    Info.userState.Join,
+                    Info.userState.Match,
+                    Info.userState.Game,
                 ),
                 allowNull: false,
             }

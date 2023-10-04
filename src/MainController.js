@@ -1,8 +1,18 @@
 const Test = require('./test.js');
-
+const MatchController = require('./match/MatchController');
 class MainService{
+    constructor(){
+        this.matchController = new MatchController();
+    }
     Start(){
         console.log("서버 시작");
+        let startInterval = setInterval(() => {
+            this.Update();
+        }, 500);
+    }
+
+    Update() {
+        this.matchController.Update();
     }
 
     JoinUser(name, studentNumber){
