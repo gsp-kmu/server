@@ -14,6 +14,6 @@ module.exports = class Room extends Sequelize.Model{
     }
 
     static associate(db) {
-        db.Room.hasMany(db.Account, { foreignKey: 'RoomId', sourceKey: 'id'})
+        db.Room.hasMany(db.User, { foreignKey: 'RoomId', sourceKey: 'id'})
     }
 }

@@ -28,6 +28,6 @@ module.exports = class UserState extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.UserState.belongsTo(db.Account, {foreignKey: 'UserId', targetKey: 'id'});
+        db.UserState.belongsTo(db.User, {foreignKey: 'UserId', targetKey: 'id'});
     }
 }

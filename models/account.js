@@ -23,9 +23,6 @@ module.exports = class Account extends Sequelize.Model{
     }
 
     static associate(db) {
-        db.Account.hasOne(db.User, {foreignKey: 'UserId', sourceKey: 'id'});
-        db.Account.hasOne(db.UserState, {foreignKey: 'UserId', sourceKey: 'id'});
-        db.Account.hasMany(db.Deck, { foreignKey: 'UserId', sourceKey: 'id'})
-        db.Account.belongsTo(db.Room, { foreignKey: 'RoomId', targetKey: 'id'});
+        db.Account.belongsTo(db.User, {foreignKey: 'UserId', targetKey: 'id'});
     }
 }
