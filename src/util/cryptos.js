@@ -20,6 +20,7 @@ console.log(test);
 let test2 = decipher(test);
 console.log(test2);
 
+// DB에 비밀번호를 저장
 async function storeHash(string){
     const hashedString = await createHash(string);
     console.log(hashedString.hashed);
@@ -27,6 +28,7 @@ async function storeHash(string){
     //TODO : 해쉬랑 salt를 각각 DB에 저장하는 로직 만들기
 }
 
+// 단방향 암호화
 async function createHash(string) {
     return new Promise(async (resolve, rejects) => {
         const salt = await createSalt();
@@ -38,6 +40,7 @@ async function createHash(string) {
 
 }
 
+// Salt 만들기
 function createSalt() {
     return new Promise((resolve, rejects) => {
         crypto.randomBytes(64, (err, buf) => {
