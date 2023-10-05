@@ -12,6 +12,10 @@ module.exports = class Account extends Sequelize.Model{
                 type: Sequelize.STRING(20),
                 allowNull: false,
             },
+            salt: {
+                type: Sequelize.STRING(20),
+                allowNull: false,
+            },
         },
             {
                 sequelize,
