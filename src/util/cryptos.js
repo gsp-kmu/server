@@ -11,23 +11,6 @@ const CRYPTO_KEY = process.env.CRYPTO_KEY;
 const CRYPTO_ALGORITHM = process.env.CRYPTO_ALGORITHM;
 const IV = process.env.INITIAL_VECTOR;
 
-//hash만들기
-storeHash('mclub4');
-
-//양방향 암호화, 복호화
-let test = cipher('mclub4');
-console.log(test);
-let test2 = decipher(test);
-console.log(test2);
-
-// DB에 비밀번호를 저장
-async function storeHash(string){
-    const hashedString = await createHash(string);
-    console.log(hashedString.hashed);
-    console.log(hashedString.salt);
-    //TODO : 해쉬랑 salt를 각각 DB에 저장하는 로직 만들기
-}
-
 // 단방향 암호화
 async function createHash(string) {
     return new Promise(async (resolve, rejects) => {
@@ -63,3 +46,5 @@ function decipher(result){
     let result2 = decipher.update(result, 'base64', 'utf-8') + decipher.final('utf-8');
     return result2
 }
+
+module.exports = {createHash, createSalt, cipher, decipher};
