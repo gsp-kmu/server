@@ -27,9 +27,14 @@ const test = () => {
     sequelize.sync({ force: false })
     .then(() => {
         console.log('데이터베이스 연결 됨');
-        AddUserId('hello', 3);
+        AddUserId('ce020e4e401438867853183fbf73b495', 1);
+        AddUserId('7829f1f37beb95abd615fe1116f01e46', 2);
+        AddUserId('642a03285e9889978f08c5513033b297', 3);
     })
     .catch((error) => {
         console.log(error);
     });
 }
+
+
+test();

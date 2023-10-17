@@ -21,7 +21,7 @@ const select = async () => {
     console.log(accounts);
 
 
-    // select id, password from accounts where id = 20191546;
+    // select id, p assword from accounts where id = 20191546;
     const account = await Account.findOne({
         attributes: ['id', 'password'],
         where: {

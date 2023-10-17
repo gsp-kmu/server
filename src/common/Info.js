@@ -4,6 +4,8 @@ class Info {
         Match:'MATCH',
         Game:'GAME',
     });
+
+    static MAX_PLAYER = Object.freeze(2);
 }
 
 module.exports = Info;
