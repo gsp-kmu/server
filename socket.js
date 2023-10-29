@@ -1,4 +1,6 @@
 const SocketIO = require('socket.io');
+const { AddUserId } = require('./src/util/database');
+const { User, Account, UserState } = require('./models');
 
 let io = null;
 
@@ -11,15 +13,27 @@ module.exports = (server) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         console.log('new client join! ', ip, socket.id, req.ip);
         testId = socket.id
+        
         //io.to(testId).emit("hhhh", "testtest hhh");
+        socket.on("login", async (data)=>{
+            const user = await Account.findOne({
+                where:{
+                'id':data._id,
+            }},);
+            AddUserId(socket.id, user.UserId);
+        });
 
         socket.on("test-card", (data)=>{
             const card = data;
             console.log(card);
         })
 
-        socket.on('disconect', ()=>{
+        socket.on('disconnect', ()=>{
             console.log('bye bye client', ip, socket.id);
+            UserState.destroy({where:{
+                    socketId:socket.id,
+                }
+            });
         })
     });
 

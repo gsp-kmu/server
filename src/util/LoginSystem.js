@@ -24,7 +24,8 @@ class LoginSystem{
             const salt = hash.salt;
 
             const account = await Account.create({id: cryptedId, password: cryptedPW, salt: salt});
-
+            const user = await User.create();
+            await account.setUser(user);
             return true;
         }
         else{
