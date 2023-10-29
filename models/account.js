@@ -4,12 +4,16 @@ module.exports = class Account extends Sequelize.Model{
     static init(sequelize) {
         return super.init({
             id: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(100),
                 allowNull: false,
                 primaryKey: true,
             },
             password: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(100),
+                allowNull: false,
+            },
+            salt: {
+                type: Sequelize.STRING(100),
                 allowNull: false,
             },
         },
