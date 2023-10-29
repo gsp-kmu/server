@@ -13,6 +13,7 @@ const app = express();
 sequelize.sync({force:false})
     .then(()=>{
         console.log('데이터베이스 연결 됨');
+        console.log('CI/CD도 성공?');
     })
     .catch((error) => {
         console.log(error);
