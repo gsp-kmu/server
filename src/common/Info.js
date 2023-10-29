@@ -6,6 +6,11 @@ class Info {
     });
 
     static MAX_PLAYER = Object.freeze(2);
+    static MAX_TURN = 8;
+
+    static EVENT_MESSAGE = Object.freeze({
+        INGAME_END:'ingame_end',
+    })
 }
 
 module.exports = Info;

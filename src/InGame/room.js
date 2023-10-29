@@ -1,5 +1,6 @@
 const Turn = require("./turn");
 const Info = require('../common/Info');
+const resultService = require('../ResultService');
 
 class GameRoom{
     constructor(user1, user2){
@@ -10,7 +11,10 @@ class GameRoom{
     }
 
     Update(){
-
+        if(this.turn.CheckTurnEnd() == true){
+            const result = resultService.GetUserReuslt(this.users[0], this.users[1]);
+            io.to(testId).emit(Info.EVENT_MESSAGE.INGAME_END, result);
+        }
     }
 }
 
