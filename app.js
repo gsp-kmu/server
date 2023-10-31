@@ -14,6 +14,7 @@ sequelize.sync({force:false})
     .then(()=>{
         console.log('데이터베이스 연결 됨');
         console.log('CI/CD도 성공?');
+        console.log('테스트해보기');
     })
     .catch((error) => {
         console.log(error);
