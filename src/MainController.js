@@ -4,8 +4,8 @@ const GameController = require('./GameController.js');
 
 class MainService{
     constructor(){
-        this.matchController = new MatchController();
         this.gameController = new GameController();
+        this.matchController = new MatchController();
     }
     Start(){
         console.log("서버 시작");

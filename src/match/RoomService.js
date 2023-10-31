@@ -2,6 +2,8 @@ const Room = require('../../models/room');
 const GameRoom = require('../InGame/room');
 
 class RoomService{
+    rooms = [];
+    
     async CreateRoom(userState1, userState2){
         const room = await Room.create({});
         const user1 = await userState1.getUser();

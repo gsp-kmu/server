@@ -15,7 +15,7 @@ class MatchController{
             if(count >= 2){
                 console.log('2명 이상 접속됨');
                 const {user1, user2} = await this.GetUserTwoRandom(count, rows);
-                roomService.CreateRoom(user1, user2).then(async ()=>{
+                const room = await roomService.CreateRoom(user1, user2).then(async ()=>{
                     console.log("매칭 성공");
                     user1.state = Info.userState.Game;
                     user2.state = Info.userState.Game;
@@ -23,6 +23,7 @@ class MatchController{
                     await user1.save();
                     await user2.save();
                 });
+                roomService.AddRoom(room);
             }
         });
       }
