@@ -7,20 +7,25 @@ let io = null;
 let testId = null;
 module.exports = (server) => {
     io = SocketIO(server, {path:'/socket.io'});
-    
+    const room = io.of('./room');
+    room.on('connection', (socket)=>{
+        console.log("룸 접속");
+    });
     io.on('connection', (socket)=>{
         const req = socket.request;
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         console.log('new client join! ', ip, socket.id, req.ip);
-        testId = socket.id
-        
+        testId = socket.id;
+
         //io.to(testId).emit("hhhh", "testtest hhh");
         socket.on("login", async (data)=>{
             const user = await Account.findOne({
                 where:{
-                'id':data._id,
+                'id':data.id,
             }},);
-            AddUserId(socket.id, user.UserId);
+
+            if(user != null)
+                AddUserId(socket.id, user.UserId);
         });
 
         socket.on("test-card", (data)=>{
