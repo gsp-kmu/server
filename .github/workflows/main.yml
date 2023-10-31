@@ -1,4 +1,4 @@
-name: CICD
+name: CICD TEST
 on:
   push:
       branches: [ main ]
@@ -17,5 +17,4 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-            screen -r
             npm start
