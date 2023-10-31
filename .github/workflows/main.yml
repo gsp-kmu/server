@@ -1,4 +1,4 @@
-name: CICD TEST
+name: CICD TESTING
 on:
   push:
       branches: [ main ]
