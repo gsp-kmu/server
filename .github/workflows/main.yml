@@ -40,3 +40,4 @@ jobs:
 
           # Suppose you need a cron task.
           # gcloud -q app deploy cron.yaml
+          npm start
