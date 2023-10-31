@@ -41,4 +41,5 @@ jobs:
           
       - name: Npm start
         run : |
+          screen -r
           npm start
