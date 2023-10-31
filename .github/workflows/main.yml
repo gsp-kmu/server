@@ -33,6 +33,7 @@ jobs:
 
       - name: Publish app to Google App Engine
         run: |
+          echo "테스트!"
           # This client-secret.json is converted by GCP_SA_KEY.
           gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
           gcloud config set project ${{ secrets.PROJECT_ID }}
