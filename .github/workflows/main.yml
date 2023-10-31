@@ -1,37 +1,21 @@
-name: Build and Deploy to Google Compute Engine
-
+name: CICD-SSH
 on:
   push:
-    branches:
-      - main
-
-env:
-  PROJECT_ID: $
-  GCE_INSTANCE: kmu-gamesoftware-dev
-  GCE_INSTANCE_ZONE: us-west1-b 
+      branches: [ main ]
+      paths:
+        - '**'
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@main
-        with:
-          version: '290.0.1'
-          service_account_key: $
-          project_id: $
-
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |-
-          gcloud --quiet auth configure-docker
-      # Push the Docker image to Google Container Registry
-      - name: Publish
-        run: |-
-          screen -r
-          npm start
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }} 
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: |
+            screen -r
+            npm start
