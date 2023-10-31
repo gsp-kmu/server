@@ -1,4 +1,4 @@
-const { roomService } = require("./match/RoomService");
+const { roomService } = require("../match/RoomService");
 
 
 class GameController {
