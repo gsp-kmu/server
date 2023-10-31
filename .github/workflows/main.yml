@@ -17,6 +17,6 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-            screen -r
+            echo "Hello"
             cd gamesoftware/server/
             npm start
