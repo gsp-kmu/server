@@ -1,13 +1,13 @@
 const { User } = require("../../models");
 const { UserState } = require("../../models");
-const RoomController = require("./RoomController");
+const RoomController = require("./RoomService");
 const Info = require("../common/Info");
 const Utill = require("../util/utill");
 const io = require("../../socket");
+const roomService = require('./RoomService');
 
 class MatchController{
     constructor(){
-        this.roomController = new RoomController()
     }
     async Update() {
         this.GetMatchUserStates().then(async ({count, rows}) =>{
@@ -15,7 +15,7 @@ class MatchController{
             if(count >= 2){
                 console.log('2명 이상 접속됨');
                 const {user1, user2} = await this.GetUserTwoRandom(count, rows);
-                this.roomController.CreateRoom(user1, user2).then(async ()=>{
+                roomService.CreateRoom(user1, user2).then(async ()=>{
                     console.log("매칭 성공");
                     user1.state = Info.userState.Game;
                     user2.state = Info.userState.Game;

@@ -1,8 +1,11 @@
 const Test = require('./test.js');
 const MatchController = require('./match/MatchController');
+const GameController = require('./GameController.js');
+
 class MainService{
     constructor(){
         this.matchController = new MatchController();
+        this.gameController = new GameController();
     }
     Start(){
         console.log("서버 시작");
@@ -13,8 +16,7 @@ class MainService{
 
     Update() {
         this.matchController.Update();
-        
-        // Game Room Update
+        this.gameController.Update();
     }
 
     JoinUser(name, studentNumber){

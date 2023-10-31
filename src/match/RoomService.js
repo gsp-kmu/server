@@ -1,15 +1,7 @@
 const Room = require('../../models/room');
 const GameRoom = require('../InGame/room');
 
-class RoomController{
-    constructor(){
-        this.rooms = [];
-    }
-
-    Update(){
-
-    }
-    
+class RoomService{
     async CreateRoom(userState1, userState2){
         const room = await Room.create({});
         const user1 = await userState1.getUser();
@@ -17,8 +9,12 @@ class RoomController{
 
         await room.addUser([user1, user2]);
         console.log('room 생성 완료');
-        const gameRoom = new GameRoom(user1,user2);
-        return gameRoom;
+        
+        return this.CreateGameRoom(user1, user2);
+    }
+
+    CreateGameRoom(user1, user2){
+        return new GameRoom(user1, user2);
     }
 
     AddRoom(room){
@@ -29,5 +25,5 @@ class RoomController{
 
     }
 }
-
-module.exports = RoomController;
+const roomService = new RoomService();
+module.exports = {roomService};
