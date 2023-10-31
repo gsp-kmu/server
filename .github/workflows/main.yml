@@ -1,45 +1,37 @@
-name: deploy GAE
+name: Build and Deploy to Google Compute Engine
 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+env:
+  PROJECT_ID: $
+  GCE_INSTANCE: kmu-gamesoftware-dev
+  GCE_INSTANCE_ZONE: us-west1-b 
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Initialize Google Cloud SDK
-        uses: zxyle/publish-gae-action@master
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          project_id: ${{ secrets.PROJECT_ID }}
-          # An optional variables parameter can be used
-          gae_variables: ${{ secrets.GAE_VARIABLES }}
+          version: '290.0.1'
+          service_account_key: $
+          project_id: $
 
-      - name: Publish app to Google App Engine
-        run: |
-          echo "테스트!"
-          # This client-secret.json is converted by GCP_SA_KEY.
-          gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
-          gcloud config set project ${{ secrets.PROJECT_ID }}
-          gcloud -q app deploy app.yaml --promote
-          
-      - name: Npm start
-        run : |
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+      - run: |-
+          gcloud --quiet auth configure-docker
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |-
           screen -r
           npm start
