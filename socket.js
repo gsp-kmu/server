@@ -7,25 +7,34 @@ let io = null;
 let testId = null;
 module.exports = (server) => {
     io = SocketIO(server, {path:'/socket.io'});
-    const room = io.of('./room');
+    const room = io.of('/room');
     room.on('connection', (socket)=>{
         console.log("룸 접속");
+        const { rooms } = io.of('/room').adapter;
+        console.log(rooms);
+    });
+    room.on("hi", ()=>{
+        console.log("room room");
     });
     io.on('connection', (socket)=>{
         const req = socket.request;
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         console.log('new client join! ', ip, socket.id, req.ip);
-        testId = socket.id;
 
+        //console.log(io.sockets.sockets.get(testId));
         //io.to(testId).emit("hhhh", "testtest hhh");
         socket.on("login", async (data)=>{
+            console.log(data);
             const user = await Account.findOne({
                 where:{
-                'id':data.id,
+                'id':data,
             }},);
 
-            if(user != null)
+            console.log(user);
+            if(user != null){
+                console.log("AddUserId");
                 AddUserId(socket.id, user.UserId);
+            }
         });
 
         socket.on("test-card", (data)=>{
@@ -62,6 +71,10 @@ module.exports = (server) => {
             console.log('테스트 카드 클라한테 보냄');
         }
     })
+
+    return io;
 }
 
-module.exports.io = io;
+module.exports.getIO =()=>{
+    return io;
+}

@@ -4,9 +4,14 @@ const { roomService } = require("../match/RoomService");
 class GameController {
     constructor(){
         this.rooms = roomService.rooms;
+        console.log("length는?: ", roomService.rooms.length);
     }
     Update(){
-        for(i = 0; i < this.rooms.length; i++){
+        for(let i = 0; i < this.rooms.length; i++){
+            // console.log("i는? ", i);
+            // console.log("this는?: ", this.rooms.length);
+            // console.log(this.rooms);
+            // console.log(this.rooms[i]);
             this.rooms[i].Update();
         }
     }

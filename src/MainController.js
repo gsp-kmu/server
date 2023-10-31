@@ -9,9 +9,9 @@ class MainService{
     }
     Start(){
         console.log("서버 시작");
-        // let startInterval = setInterval(() => {
-        //     this.Update();
-        // }, 500);
+        let startInterval = setInterval(() => {
+            this.Update();
+        }, 500);
     }
 
     Update() {

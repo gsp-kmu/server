@@ -1,7 +1,6 @@
 const Turn = require("./turn");
 const Info = require('../common/Info');
 const resultService = require('../ResultService');
-
 class GameRoom{
     constructor(user1, user2){  
         this.users = []

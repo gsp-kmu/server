@@ -4,7 +4,7 @@ const RoomController = require("./RoomService");
 const Info = require("../common/Info");
 const Utill = require("../util/utill");
 const io = require("../../socket");
-const roomService = require('./RoomService');
+const { roomService } = require('./RoomService');
 
 class MatchController{
     constructor(){
@@ -15,14 +15,13 @@ class MatchController{
             if(count >= 2){
                 console.log('2명 이상 접속됨');
                 const {user1, user2} = await this.GetUserTwoRandom(count, rows);
-                const room = await roomService.CreateRoom(user1, user2).then(async ()=>{
-                    console.log("매칭 성공");
-                    user1.state = Info.userState.Game;
-                    user2.state = Info.userState.Game;
-                    console.log("매칭 완료 user1, user2 Game상태 변경");
-                    await user1.save();
-                    await user2.save();
-                });
+                const room = await roomService.CreateRoom(user1, user2);
+                console.log("매칭 성공");
+                user1.state = Info.userState.Game;
+                user2.state = Info.userState.Game;
+                console.log("매칭 완료 user1, user2 Game상태 변경");
+                await user1.save();
+                await user2.save();
                 roomService.AddRoom(room);
             }
         });
