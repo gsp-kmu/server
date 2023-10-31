@@ -11,6 +11,7 @@ jobs:
     steps:
     - name: executing remote ssh commands using ssh key
       uses: appleboy/ssh-action@master
+      continue-on-error: true
       with:
         host: ${{ secrets.HOST }} 
         username: ${{ secrets.USERNAME }}
@@ -22,3 +23,4 @@ jobs:
             cd gamesoftware/server/
             nohup npm start </dev/null &
             echo "CI/CD 정상 작동됨"
+          
