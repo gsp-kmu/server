@@ -6,7 +6,9 @@ class GameController {
         this.rooms = roomService.rooms;
     }
     Update(){
-        
+        for(i = 0; i < this.rooms.length; i++){
+            this.rooms[i].Update();
+        }
     }
 }
 
