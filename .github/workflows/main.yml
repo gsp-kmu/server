@@ -17,8 +17,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: 22
         script: |
-            screen -r
             sudo fuser -k 8000/tcp
             echo "CI/CD 정상 작동됨"
             cd gamesoftware/server/
-            npm start
+            nohup npm start </dev/null &
