@@ -1,5 +1,6 @@
 class GameUser{
-    constructor(){
+    constructor(socketId){
+        this.socketId = socketId;
         this.numberHold = [0,0];
     }
 
@@ -11,3 +12,5 @@ class GameUser{
         return this.numberHold[1];
     }
 }
+
+module.exports = GameUser;

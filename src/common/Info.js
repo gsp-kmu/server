@@ -10,6 +10,8 @@ class Info {
 
     static EVENT_MESSAGE = Object.freeze({
         INGAME_END:'ingame_end',
+        SOCKET_LOGIN:'socket_login',
+        INGAME_TURN:'ingame_turn',
     })
 }
 

@@ -16,7 +16,14 @@ function Send(id, eventName, eventMessage){
 function GetIO(){
     return io;
 }
-
+class NetworkService{
+    static InGameTurn = (turn)=>{
+        return {
+            "turn":turn,
+        }
+    };
+}
+module.exports.NetworkService = NetworkService;
 module.exports = {GetSocket, Send, GetIO};
 module.exports.InitIO =(_io)=>{
     io = _io;
