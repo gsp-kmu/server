@@ -13,23 +13,33 @@ class GameRoom{
         this.users.push(new GameUser(user2));
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
-        this.SendFirstTurn();
+        this.SendTurn();
 
         this.socket1 = GetSocket(user1);
         this.socket2 = GetSocket(user2);
+
+        this.RegisterEvent();
     }
 
     RegisterEvent(){
         for (let i = 0; i < Info.MAX_PLAYER; i++) {
             const socket = GetSocket(this.users[i].socketId);
+
+            socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END,()=>{
+                // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
+                if (i == this.turn.GetTurn()){
+                    this.turn.NextTurn();
+                    this.SendTurn();
+                }
+            });
+
             socket.on(Info.EVENT_MESSAGE.TEST, (data) => {
-                console.log("test:  ", data);
+                console.log(i,"  test:  ", data);
             })
         }
     }
 
     Update(){
-        this.SendMessage('test-message', "update 잘 되고 있음");
         if(this.turn.CheckTurnEnd() == true){
             const result = resultService.GetUserReuslt(this.users[0], this.users[1]);
             io.to(testId).emit(Info.EVENT_MESSAGE.INGAME_END, result);
@@ -49,7 +59,7 @@ class GameRoom{
         return true;
     }
 
-    SendFirstTurn(){
+    SendTurn(){
         const currentTurn = this.turn.currentTurn;
         for(let i=0;i<this.users.length;i++){
             const InGameTurn = {
@@ -58,7 +68,6 @@ class GameRoom{
             if(i != currentTurn)
                 InGameTurn.turn = '1';
 
-            console.log("socketId: ", this.users[i].socketId, "   turn:  ", InGameTurn);
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_TURN, InGameTurn);
         }
     }

@@ -12,6 +12,7 @@ class Info {
         INGAME_END:'ingame_end',
         SOCKET_LOGIN:'socket_login',
         INGAME_TURN:'ingame_turn',
+        INGAME_TURN_END:'ingame_turn_end',
         TEST:'test',
     })
 }
