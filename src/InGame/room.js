@@ -1,7 +1,7 @@
 const Turn = require("./turn");
 const Info = require('../common/Info');
 const resultService = require('../ResultService');
-const {Send, GetIO} = require('../common/NetworkService');
+const {Send, GetIO, GetSocket} = require('../common/NetworkService');
 const UserState = require('../../models/userstate');
 const GameUser = require('./user');
 const NetworkService = require('../common/NetworkService').NetworkService;
@@ -14,6 +14,18 @@ class GameRoom{
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
         this.SendFirstTurn();
+
+        this.socket1 = GetSocket(user1);
+        this.socket2 = GetSocket(user2);
+    }
+
+    RegisterEvent(){
+        for (let i = 0; i < Info.MAX_PLAYER; i++) {
+            const socket = GetSocket(this.users[i].socketId);
+            socket.on(Info.EVENT_MESSAGE.TEST, (data) => {
+                console.log("test:  ", data);
+            })
+        }
     }
 
     Update(){
