@@ -10,12 +10,15 @@ class LoginSystem{
 
     async Register(){
         const cryptedId = await cryptoModule.cipher(this._id);
-
+        
+        console.log(cryptedId);
         const exist = await Account.findOne({
             where:{
                 id : cryptedId,
             },
         },);
+
+        console.log("오류 찍기");
 
         if(exist == null){
             console.log("OK");
@@ -24,8 +27,7 @@ class LoginSystem{
             const salt = hash.salt;
 
             const account = await Account.create({id: cryptedId, password: cryptedPW, salt: salt});
-            const user = await User.create();
-            await account.setUser(user);
+
             return true;
         }
         else{
@@ -58,14 +60,12 @@ class LoginSystem{
                 id,
             },
         },);
-        console.log("해쉬 돌려본 값 " + result.hashed);
-        console.log("DB에 있는 값 " + realPW.password);
         if(realPW.password == result.hashed){
             console.log("로그인 성공!");
             return true;
         }
         else{
-            console.log("로그인 실패");
+            console.log("로그인 실패!");
             return false;
         }
     });    
