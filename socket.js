@@ -5,6 +5,7 @@ const { User, Account, UserState } = require('./models');
 let io = null;
 
 let testId = null;
+
 module.exports = (server) => {
     io = SocketIO(server, {path:'/socket.io'});
     const room = io.of('/room');
@@ -13,6 +14,7 @@ module.exports = (server) => {
         const { rooms } = io.of('/room').adapter;
         console.log(rooms);
     });
+    
     room.on("hi", ()=>{
         console.log("room room");
     });

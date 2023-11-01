@@ -11,7 +11,7 @@ class MatchController{
     }
     async Update() {
         this.GetMatchUserStates().then(async ({count, rows}) =>{
-            console.log("count: ", count);
+            //console.log("count: ", count);
             if(count >= 2){
                 console.log('2명 이상 접속됨');
                 const {user1, user2} = await this.GetUserTwoRandom(count, rows);

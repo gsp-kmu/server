@@ -23,6 +23,10 @@ class MainService{
         const user = new Test(name, studentNumber);
         console.log(user.toString());
     }
+
+    LeaveUser(){
+        console.log("Leav 됨 됨되모딤ㅁ");
+    }
 }
 
 module.exports = MainService;
