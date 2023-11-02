@@ -18,7 +18,7 @@ module.exports = (server) => {
         socket.on("login", async (data)=>{
             const user = await Account.findOne({
                 where:{
-                'id':data._id,
+                'id':data,
             }},);
             AddUserId(socket.id, user.UserId);
         });
