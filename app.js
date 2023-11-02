@@ -54,6 +54,7 @@ app.post("/login", async (req, res) => {
     const module = new LoginSystem(id, password);
     const execute = await module.Login();
 
+    console.log(execute);
     if(execute == true){
         res.status(200).send('success login');
     }
