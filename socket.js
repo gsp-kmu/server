@@ -1,7 +1,7 @@
 const SocketIO = require('socket.io');
 const { AddUserId } = require('./src/util/database');
 const { User, Account, UserState } = require('./models');
-const cryptoModule = require("./cryptos");
+const cryptoModule = require("./src/util/cryptos");
 
 let io = null;
 
