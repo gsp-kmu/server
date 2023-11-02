@@ -1,6 +1,6 @@
 const Test = require('./test.js');
 const MatchController = require('./match/MatchController');
-const GameController = require('./InGame/GameController.js');
+const GameController = require('./InGame/GameController');
 
 class MainService{
     constructor(){
