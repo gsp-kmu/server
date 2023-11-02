@@ -1,11 +1,11 @@
-import {RoomClient} from "./RoomClient";
+import {RoomClient} from "../RoomClient";
 
 export class Card{
     constructor(){
 
     }
 
-    Use(roomClient: RoomClient){
-        roomClient.Test();
+    Use(myId:string, roomClient: RoomClient){
+        return roomClient.GetUser();
     }
 };

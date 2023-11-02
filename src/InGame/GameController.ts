@@ -1,17 +1,14 @@
 import {Card} from "./Card/Card";
 const { roomService } = require("../match/RoomService");
-import { RoomClient } from "./Card/RoomClient";
+import { RoomClient } from "./RoomClient";
 
-class GameController extends RoomClient {
+class GameController {
     rooms: any;
     constructor(){
-        super();
         this.rooms = roomService.rooms;;
         console.log("length는?: ", roomService.rooms.length);
-
-        let card:Card = new Card();
-        card.Use(this);
     }
+    
 
     Update(){
         for(let i = 0; i < this.rooms.length; i++){

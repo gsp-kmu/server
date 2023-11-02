@@ -5,9 +5,15 @@ const {Send, GetIO, GetSocket} = require('../common/NetworkService');
 const UserState = require('../../models/userstate');
 const GameUser = require('./user');
 const NetworkService = require('../common/NetworkService').NetworkService;
+import { RoomClient } from "./RoomClient";
+class GameRoom implements RoomClient{
+    users: any[];
+    id: any;
+    turn: any;
+    socket1: any;
+    socket2: any;
 
-class GameRoom{
-    constructor(user1, user2, id){  
+    constructor(user1:any, user2:any, id:any){  
         this.users = []
         this.users.push(new GameUser(user1));
         this.users.push(new GameUser(user2));
@@ -33,7 +39,7 @@ class GameRoom{
                 }
             });
 
-            socket.on(Info.EVENT_MESSAGE.TEST, (data) => {
+            socket.on(Info.EVENT_MESSAGE.TEST, (data:any) => {
                 console.log(i,"  test:  ", data);
             })
         }
@@ -42,11 +48,10 @@ class GameRoom{
     Update(){
         if(this.turn.CheckTurnEnd() == true){
             const result = resultService.GetUserReuslt(this.users[0], this.users[1]);
-            io.to(testId).emit(Info.EVENT_MESSAGE.INGAME_END, result);
         }
     }
 
-    SendMessage(eveentName, message){
+    SendMessage(eveentName:string, message:any){
         Send("room" + this.id, eveentName, message);
     }
 
@@ -70,6 +75,14 @@ class GameRoom{
 
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_TURN, InGameTurn);
         }
+    }
+
+    RegisterAbility(){
+        
+    }
+
+    GetUser() {
+        
     }
 }
 
