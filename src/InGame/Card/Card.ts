@@ -1,3 +1,5 @@
+import { Transform } from "../Ability/Transform";
+import { Ability } from "../Ability/Ability";
 import {RoomClient} from "../RoomClient";
 
 export class Card{
@@ -6,6 +8,14 @@ export class Card{
     }
 
     Use(myId:string, roomClient: RoomClient){
-        return roomClient.GetUser();
+        return roomClient.GetUsers();
     }
 };
+
+class TransformCard extends Card{
+    ability: Ability
+    constructor(){
+        super();
+        this.ability = new Transform
+    }
+}

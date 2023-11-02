@@ -5,16 +5,19 @@ const {Send, GetIO, GetSocket} = require('../common/NetworkService');
 const UserState = require('../../models/userstate');
 const GameUser = require('./user');
 const NetworkService = require('../common/NetworkService').NetworkService;
+import { Ability } from "./Ability/Ability";
 import { RoomClient } from "./RoomClient";
 class GameRoom implements RoomClient{
     users: any[];
+    endAbility: Ability[];
     id: any;
     turn: any;
     socket1: any;
     socket2: any;
 
     constructor(user1:any, user2:any, id:any){  
-        this.users = []
+        this.users = [];
+        this.endAbility = [];
         this.users.push(new GameUser(user1));
         this.users.push(new GameUser(user2));
         this.id = id;
@@ -47,6 +50,7 @@ class GameRoom implements RoomClient{
 
     Update(){
         if(this.turn.CheckTurnEnd() == true){
+            this.PlayEndAbility();
             const result = resultService.GetUserReuslt(this.users[0], this.users[1]);
         }
     }
@@ -77,12 +81,18 @@ class GameRoom implements RoomClient{
         }
     }
 
-    RegisterAbility(){
-        
+    RegisterEndAbility(ability: Ability) {
+        this.endAbility.push(ability);
     }
 
-    GetUser() {
-        
+    PlayEndAbility(){
+        for (let i = 0; i < this.endAbility.length;i++){
+            this.endAbility[i].Use(this);
+        }
+    }
+
+    GetUsers() {
+        return this.users;
     }
 }
 

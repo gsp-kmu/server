@@ -36,6 +36,7 @@ User.associate(db);
 UserState.associate(db);
 Room.associate(db);
 
+
 CreateCard('변신');
 CreateCard('바꿔치고 사기치고');
 CreateCard('빙의');
@@ -46,7 +47,6 @@ CreateCard('못된 장난');
 CreateCard('예언');
 CreateCard('천지 역전');
 CreateCard('천사의 요람');
-
 
 
 function CreateCard(name){

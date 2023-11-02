@@ -11,6 +11,14 @@ class GameUser{
     getTenValue() {
         return this.numberHold[1];
     }
+
+    setOneValue(value){
+        this.numberHold[0] = value;
+    }
+
+    setTenValue(value){
+        this.numberHold[1] = value;
+    }
 }
 
 module.exports = GameUser;

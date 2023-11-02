@@ -1,7 +1,8 @@
-
+import { Ability } from "./Ability/Ability";
 
 export interface RoomClient{
-    GetUser();
+    GetUsers();
 
-    RegisterAbility();
+    RegisterEndAbility(ability: Ability);
+    PlayEndAbility();
 };
