@@ -37,7 +37,8 @@ class LoginSystem{
 
     async Login(){
         const id = await cryptoModule.cipher(this._id);
-        const comparePW = new Promise(async (resolve, reject) =>{
+        let bool = false;
+        const comparePW = await new Promise(async (resolve, reject) =>{
         const salt = await Account.findOne({
             attributes: ['salt'],
             raw: true,
@@ -62,13 +63,14 @@ class LoginSystem{
         },);
         if(realPW.password == result.hashed){
             console.log("로그인 성공!");
-            return true;
+            bool = true;
         }
         else{
             console.log("로그인 실패!");
-            return false;
+            bool = false;
         }
-    });    
+    });
+    return bool;    
     }
 }
 
