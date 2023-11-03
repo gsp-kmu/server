@@ -52,7 +52,20 @@ module.exports = (server) => {
                 userState.state = Info.userState.Match;
                 await userState.save();
             }
-        })
+        });
+        socket.on(Info.EVENT_MESSAGE.MATCH_CANCEL, async ()=>{
+            const userState = await UserState.findOne({
+                where:{
+                    'socketId':socket.id,
+                    'state':Info.userState.Join,
+                }
+            });
+
+            if(userState != null){
+                userState.state = Info.userState.Join;
+                await userState.save();
+            }
+        });
         socket.on("test-card", (data)=>{
             const card = data;
             console.log(card);

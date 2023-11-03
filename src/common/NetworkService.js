@@ -9,6 +9,7 @@ function GetSocket(socketId){
     console.log("socket    ", socket);
     return socket;
 }
+
 function Send(id, eventName, eventMessage){
     console.log("id:", id, "  eventName:", eventName, "  message: ", eventMessage);
     io.to(id).emit(eventName, eventMessage);
