@@ -1,6 +1,7 @@
 const SocketIO = require('socket.io');
 const { AddUserId } = require('./src/util/database');
 const { User, Account, UserState } = require('./models');
+const Info = require('./src/common/Info');
 
 let io = null;
 
@@ -39,6 +40,19 @@ module.exports = (server) => {
             }
         });
 
+        socket.on(Info.EVENT_MESSAGE.MATCH_START, async ()=>{
+            const userState = await UserState.findOne({
+                where:{
+                    'socketId':socket.id,
+                    'state':Info.userState.Join,
+                }
+            });
+
+            if(userState != null){
+                userState.state = Info.userState.Match;
+                await userState.save();
+            }
+        })
         socket.on("test-card", (data)=>{
             const card = data;
             console.log(card);

@@ -14,8 +14,8 @@ export class Card{
 
 class TransformCard extends Card{
     ability: Ability
-    constructor(){
+    constructor(id:number){
         super();
-        this.ability = new Transform
+        this.ability = new Transform(id);
     }
 }
