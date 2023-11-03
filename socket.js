@@ -49,6 +49,7 @@ module.exports = (server) => {
             });
 
             if(userState != null){
+                console.log(socket.id, " 매칭 시작함");
                 userState.state = Info.userState.Match;
                 await userState.save();
             }
@@ -57,11 +58,12 @@ module.exports = (server) => {
             const userState = await UserState.findOne({
                 where:{
                     'socketId':socket.id,
-                    'state':Info.userState.Join,
+                    'state':Info.userState.Match,
                 }
             });
 
             if(userState != null){
+                console.log(socket.id, " 매칭 취소함");
                 userState.state = Info.userState.Join;
                 await userState.save();
             }
