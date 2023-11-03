@@ -17,6 +17,8 @@ class Info {
         SOCKET_LOGIN:'socket_login',
         INGAME_TURN:'ingame_turn',
         INGAME_TURN_END:'ingame_turn_end',
+        INGAME_END_WIN:'ingame_end_win',
+        INGAME_END_LOSE:'ingame_end_lose',
         TEST:'test',
     })
 }

@@ -1,5 +1,3 @@
-const { Model } = require('sequelize');
-
 let io = null;
 
 function GetSocket(socketId){
@@ -24,9 +22,15 @@ class NetworkService{
             "turn":turn,
         }
     };
+
+    static InGameEnd = (winId)=>{
+        return {
+            "winId":winId,
+        }
+    }
 }
-module.exports.NetworkService = NetworkService;
-module.exports = {GetSocket, Send, GetIO};
+
+module.exports = {NetworkService, GetSocket, Send, GetIO};
 module.exports.InitIO =(_io)=>{
     io = _io;
 }
