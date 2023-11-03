@@ -7,7 +7,8 @@ const config = {
     "password": process.env.DEVELOPMENT_PASSWORD,
     "database": process.env.DEVELOPMENT_DATABASE,
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false,
   },
   "test": {
     "username": process.env.TEST_NAME,

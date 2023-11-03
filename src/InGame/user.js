@@ -1,5 +1,6 @@
 class GameUser{
-    constructor(){
+    constructor(socketId){
+        this.socketId = socketId;
         this.numberHold = [0,0];
     }
 
@@ -10,4 +11,14 @@ class GameUser{
     getTenValue() {
         return this.numberHold[1];
     }
+
+    setOneValue(value){
+        this.numberHold[0] = value;
+    }
+
+    setTenValue(value){
+        this.numberHold[1] = value;
+    }
 }
+
+module.exports = GameUser;

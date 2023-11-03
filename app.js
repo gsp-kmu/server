@@ -5,7 +5,6 @@ dotenv.config();
 
 const {sequelize} = require('./models');
 const webSocket = require('./socket');
-const io = require("./socket").io;
 const MainService = require('./src/MainController');
 const RandomService = require('./src/shop/randomCard');
 const app = express();
@@ -72,8 +71,8 @@ const server = app.listen(app.get('port'), () => {
 });
 
 
-webSocket(server);
-
+const _io = webSocket(server);
+require("./src/common/NetworkService").InitIO(_io);
 const mainService = new MainService();
 const randomService = new RandomService();
 mainService.Start();
