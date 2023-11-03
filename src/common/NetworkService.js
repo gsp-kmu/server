@@ -3,10 +3,10 @@ const { Model } = require('sequelize');
 let io = null;
 
 function GetSocket(socketId){
-    console.log("socketId:   ", socketId);
+    //console.log("socketId:   ", socketId);
     const socket = io.sockets.sockets.get(socketId)
-    console.log(io.sockets.sockets);
-    console.log("socket    ", socket);
+    //console.log(io.sockets.sockets);
+    //console.log("socket    ", socket);
     return socket;
 }
 

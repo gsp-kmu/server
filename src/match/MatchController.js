@@ -16,8 +16,16 @@ class MatchController{
             if(count >= 2){
                 console.log('2명 이상 접속됨');
                 const {user1, user2} = await this.GetUserTwoRandom(count, rows);
-                Send(user1.socketId, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
-                Send(user2.socketId, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
+                
+                Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
+                Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
+
+                user1.state = Info.userState.Game;
+                user2.state = Info.userState.Game;
+                console.log("매칭 완료 user1, user2 Game상태 변경");
+                await user1.save();
+                await user2.save();
+                
                 setTimeout(()=>{
                     this.MatchUsers(user1, user2)
                 }, 3000);
@@ -25,15 +33,10 @@ class MatchController{
         });
       }
       async MatchUsers(user1, user2){
-        Send(user1.socketId, Info.EVENT_MESSAGE.MATCH_END, "");
-        Send(user2.socketId, Info.EVENT_MESSAGE.MATCH_END, "");
+        Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
+        Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
         const room = await roomService.CreateRoom(user1, user2);
         console.log("매칭 성공");
-        user1.state = Info.userState.Game;
-        user2.state = Info.userState.Game;
-        console.log("매칭 완료 user1, user2 Game상태 변경");
-        await user1.save();
-        await user2.save();
         roomService.AddRoom(room);
       }
 
