@@ -1,4 +1,4 @@
-class Info {
+module.exports =  class Info {
     static userState = Object.freeze({
         Join:'JOIN',
         Match:'MATCH',
@@ -22,5 +22,3 @@ class Info {
         TEST:'test',
     })
 }
-
-module.exports = Info;

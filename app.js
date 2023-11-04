@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 dotenv.config();
 
 const {sequelize} = require('./models');
+const { CreateCard } = require('./src/util/database');
 const webSocket = require('./socket');
 const MainService = require('./src/MainController');
 const RandomService = require('./src/shop/randomCard');
@@ -12,6 +13,7 @@ const app = express();
 sequelize.sync({force:false})
     .then(()=>{
         console.log('데이터베이스 연결 됨');
+        CreateCard();
     })
     .catch((error) => {
         console.log(error);

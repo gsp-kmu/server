@@ -1,14 +1,15 @@
 const Turn = require("./turn");
-const Info = require('../common/Info');
+const Info  = require('../common/Info');
 const resultService = require('./ResultService').resultService;
-const {Send, GetIO, GetSocket} = require('../common/NetworkService');
-const UserState = require('../../models/userstate');
+const { Send, GetIO, GetSocket} = require('../common/NetworkService');
+const { SetUserState, AddUserWinLose } = require('../util/database');
 const { GameUser } = require('./GameUser');
 const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
 import { RoomClient } from "./RoomClient";
 
 class GameRoom implements RoomClient {
+    isActive: boolean;
     users: any[];
     endAbility: Ability[];
     id: any;
@@ -16,7 +17,9 @@ class GameRoom implements RoomClient {
     socket1: any;
     socket2: any;
 
+    // user1 GameUser
     constructor(user1: any, user2: any, id: any) {
+        this.isActive = true;
         this.users = [];
         this.endAbility = [];
         this.users.push(new GameUser(user1));
@@ -55,16 +58,23 @@ class GameRoom implements RoomClient {
 
     TurnUpdate() {
         if (this.turn.CheckTurnEnd() == false) {
+            this.isActive = false;
             this.PlayEndAbility();
             const result = resultService.CalculateResult(this.users[0], this.users[1]);
             const winSocketId: string = result.user.socketId;
 
             console.log("얘가 승리함 ㅅㄱ", winSocketId);
+
             for (let i = 0; i < this.users.length; i++) {
-                if (winSocketId == this.users[i].socketId)
+                SetUserState(this.users[i].socketId, Info.userState.Join);
+                if (winSocketId == this.users[i].socketId){
+                    AddUserWinLose(winSocketId, 1, 0);
                     Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
-                else
+                }
+                else{
+                    AddUserWinLose(this.users[i].socketId, 0, 1);
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
+                }
             }
         }
     }
@@ -73,7 +83,10 @@ class GameRoom implements RoomClient {
         Send("room" + this.id, eveentName, message);
     }
 
-    CheckUserConnected() {
+    CheckRoomClose() {
+        if(this.isActive == false)
+            return false;
+
         const io = GetIO();
         const room = io.sockets.adapter.rooms.get("room" + this.id);
         if (room == undefined)

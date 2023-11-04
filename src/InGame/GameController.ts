@@ -1,11 +1,10 @@
-import {Card} from "./Card/Card";
 const { roomService } = require("../match/RoomService");
-import { RoomClient } from "./RoomClient";
+const { DestroyRoom } = require("../util/database");
 
-class GameController {
+module.exports = class GameController {
     rooms: any;
     constructor(){
-        this.rooms = roomService.rooms;;
+        this.rooms = roomService.rooms;
         console.log("length는?: ", roomService.rooms.length);
     }
     
@@ -17,9 +16,11 @@ class GameController {
             //console.log(this.rooms);
             //console.log(this.rooms[i]);
 
-            if(this.rooms[i].CheckUserConnected() == false){
+            if (this.rooms[i].CheckRoomClose() == false){
                 console.log("삭제됨");
+                DestroyRoom(this.rooms[i].id);
                 this.rooms.splice(i, 1);
+                
                 break;
             }
             this.rooms[i].Update();
@@ -27,4 +28,4 @@ class GameController {
     }
 }
 
-module.exports = GameController;
+
