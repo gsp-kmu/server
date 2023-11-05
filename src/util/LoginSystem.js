@@ -1,6 +1,7 @@
 const Account = require("../../models/account");
 const cryptoModule = require("./cryptos");
 const crypto = require('crypto');
+const User = require('../../models/user');
 
 class LoginSystem{
     constructor(id, pass){

@@ -1,6 +1,7 @@
 const SocketIO = require('socket.io');
 const { AddUserId } = require('./src/util/database');
 const { User, Account, UserState } = require('./models');
+const cryptoModule = require("./src/util/cryptos");
 
 let io = null;
 
@@ -16,9 +17,10 @@ module.exports = (server) => {
         
         //io.to(testId).emit("hhhh", "testtest hhh");
         socket.on("login", async (data)=>{
+            const idData = await cryptoModule.cipher(data);
             const user = await Account.findOne({
                 where:{
-                'id':data,
+                    'id': idData,
             }},);
             AddUserId(socket.id, user.UserId);
         });
