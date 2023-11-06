@@ -1,7 +1,7 @@
-const { Deck } = require('../../models/deck');
-const { User } = require('../../models/user');
-
 class BuildDeck{
+    Deck = require('../../models/deck.js');
+    User = require('../../models/user.js');
+
     deckName:string;
     userId:number;
     
@@ -12,7 +12,7 @@ class BuildDeck{
 
     async CreateDeck():Promise<number> {
         try{
-            const exist:Promise<string[]> = await Deck.findAll({
+            const exist:Promise<string[]> = await this.Deck.findAll({
                 where:{
                     name: this.deckName,
                     UserId : this.userId,
@@ -21,7 +21,7 @@ class BuildDeck{
             console.log(exist);
             // 덱의 이름은 중복 불가
             if(exist == null || (await exist).length == 0){
-                const getLength:Promise<string[]> = await Deck.findAll({
+                const getLength:Promise<string[]> = await this.Deck.findAll({
                     where:{
                         UserId : this.userId,
                     },
@@ -29,8 +29,8 @@ class BuildDeck{
                 
                 // 계정당 최대로 만들 수 있는 덱의 개수는 5개
                 if((await getLength).length <= 5){
-                    const deck:any = await Deck.create({name:this.deckName});
-                    const user:any = await User.findOne({
+                    const deck:any = await this.Deck.create({name:this.deckName});
+                    const user:any = await this.User.findOne({
                         where:{
                             id : this.userId,
                         },
@@ -53,3 +53,4 @@ class BuildDeck{
     }
 }
 
+module.exports = BuildDeck;

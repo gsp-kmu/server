@@ -83,13 +83,14 @@ app.post("/changedeck", async(req, res)=> {
     const {name, userId, deckList} = req.body;
 
     const module = new ChangeDeck(name, userId, deckList);
-    const execute = await module.ChangeDeck();
+    const execute = await module.ModifyDeck();
 
-    if(execute) res.status(200).send("Success change deck");
-    else res.status(400).send("Deck change Failed");
+    if(execute == 0) res.status(400).send("Number of Cards is not enough");
+    else if(execute == 1) res.status(200).send("Success change deck");
+    else if(execute == 2) res.status(401).send("Deck change Failed");
 });
 
-app.post("deletedeck", async(req, res)=> {
+app.post("/deletedeck", async(req, res)=> {
     const DeleteDeck = require('./src/deck/DeleteDeck.ts');
     const {name, userId} = req.body;
 
@@ -98,7 +99,6 @@ app.post("deletedeck", async(req, res)=> {
     
     if(execute) res.status(200).send("Success delete deck");
     else res.status(400).send("Deck delete Failed");
-
 });
 
 app.use('/test', (req, res) => {

@@ -1,4 +1,6 @@
 class DeleteDeck{
+    Deck = require('../../models/deck.js');
+
     deckName:string;
     userId:number;
     
@@ -9,7 +11,7 @@ class DeleteDeck{
 
     async DeleteDeck():Promise<boolean> {
         try{
-            await Deck.destroy({
+            await this.Deck.destroy({
                 where: {
                     name:this.deckName,
                     userId:this.userId
@@ -23,3 +25,5 @@ class DeleteDeck{
         }
     }
 }
+
+module.exports = DeleteDeck;
