@@ -18,7 +18,7 @@ class BuildDeck{
                     UserId : this.userId,
                 },
             },);
-            console.log(exist);
+            
             // 덱의 이름은 중복 불가
             if(exist == null || (await exist).length == 0){
                 const getLength:Promise<string[]> = await this.Deck.findAll({
