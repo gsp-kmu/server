@@ -19,6 +19,7 @@ module.exports =  class Info {
         INGAME_TURN_END:'ingame_turn_end',
         INGAME_END_WIN:'ingame_end_win',
         INGAME_END_LOSE:'ingame_end_lose',
+        INGAME_FIRST_CARD:'ingame_first_card',
         TEST:'test',
     })
 }

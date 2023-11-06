@@ -1,9 +1,22 @@
+import { Card } from "./Card/Card";
+import {Deck} from "./Deck";
+import {Hand} from "./Hand";
+import { DiscardHolder } from "./DisCardHolder";
+
 export class GameUser{
     socketId: string;
-    numberHold: Array<number>
-    constructor(socketId:string){
+    numberHold: Array<number>;
+    deck: Deck;
+    hand: Hand;
+    discardHolder: DiscardHolder;
+
+    constructor(socketId:string, cards:Array<number>){
         this.socketId = socketId;
         this.numberHold = [0,0];
+
+        this.deck = new Deck(cards);
+        this.hand = new Hand();
+        this.discardHolder = new DiscardHolder();
     }
 
     getOneValue() {
@@ -30,7 +43,7 @@ function IFtest(cond:boolean){
         console.log("테스트 실패");
 }
 function test(){
-    const user: GameUser = new GameUser('iosveoniesv');
+    const user: GameUser = new GameUser('iosveoniesv', []);
     IFtest(user.getOneValue() == 0);
     IFtest(user.getTenValue() == 0);
     user.setOneValue(50);

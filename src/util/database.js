@@ -2,6 +2,7 @@ const { sequelize, User, Card} = require('../../models');
 const UserState = require('../../models/userstate');
 const Info = require('../common/Info');
 const Room = require('../../models/room');
+const Deck = require('../../models/deck');
 
 // 게임에 유저가 로그인함
 async function AddUser(socketId, user) {
@@ -38,16 +39,11 @@ async function SetUserState(socketId, state){
 }
 
 async function AddUserWinLose(socketId, winValue, loseValue){
-    const userState = await UserState.findOne({
-        include: User,
-        where: {
-            'socketId':socketId,
-        }}
-    );
+    const user = await GetSocketIdToUser(socketId);
     
-    userState.User.win += winValue;
-    userState.User.lose += loseValue;
-    await userState.User.save();
+    user.win += winValue;
+    user.lose += loseValue;
+    await user.save();
 
 }
 
@@ -71,8 +67,36 @@ async function CreateCard(){
     CreateCardF('천지 역전');
     CreateCardF('천사의 요람');
 }
+async function GetDeck(deckId){
+    const deck = await Deck.findOne({
+        where: { 'id': deckId }
+    });
 
-module.exports = { AddUser, AddUserId, DestroyRoom, SetUserState, AddUserWinLose, CreateCard };
+    return deck;
+}
+async function GetDeckCards(deckId){
+    const deck = await Deck.findByPk(deckId,{
+        include:Card,
+    });
+    const cards = deck.Cards;
+    return cards.map((card)=>{
+        return card.id;
+    });
+}
+
+async function GetSocketIdToUser(socketId){
+    const userState = await UserState.findOne({
+        include: User,
+        where: {
+            'socketId': socketId,
+        }
+    });
+
+    return userState.User;
+}
+
+module.exports = { AddUser, AddUserId, DestroyRoom, SetUserState, AddUserWinLose, CreateCard, GetDeckCards, GetDeck,
+    GetSocketIdToUser};
 
 
 const test = () => {
@@ -90,3 +114,11 @@ const test = () => {
 
 
 //test();
+
+async function test2(){
+    const cards = await GetDeckCards(1);
+    console.log(cards);
+}
+
+
+test2();

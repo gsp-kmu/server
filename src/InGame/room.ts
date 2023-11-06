@@ -2,15 +2,15 @@ const Turn = require("./turn");
 const Info  = require('../common/Info');
 const resultService = require('./ResultService').resultService;
 const { Send, GetIO, GetSocket} = require('../common/NetworkService');
-const { SetUserState, AddUserWinLose } = require('../util/database');
-const { GameUser } = require('./GameUser');
+const { SetUserState, AddUserWinLose, GetDeckCards } = require('../util/database');
 const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
+import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
-    users: any[];
+    users: GameUser[];
     endAbility: Ability[];
     id: any;
     turn: any;
@@ -22,16 +22,31 @@ class GameRoom implements RoomClient {
         this.isActive = true;
         this.users = [];
         this.endAbility = [];
-        this.users.push(new GameUser(user1));
-        this.users.push(new GameUser(user2));
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
+
+        GetDeckCards(1).then(async (cards:Array<number>)=>{
+            console.log("cards: ", cards);
+            const gameUser1 = new GameUser(user1, cards);
+            this.users.push(gameUser1);
+            
+            const cards2 = await GetDeckCards(1);
+            const gameUser2 = new GameUser(user2, cards2);
+            this.users.push(gameUser2);
+
+            this.socket1 = GetSocket(user1);
+            this.socket2 = GetSocket(user2);
+
+            this.SendInitMessage();
+            this.RegisterEvent();
+
+            this.CheckRoomClose = this.RealCheckRoomClose;
+        });
+    }
+
+    SendInitMessage(){
+        this.SendFirstCard();
         this.SendTurn();
-
-        this.socket1 = GetSocket(user1);
-        this.socket2 = GetSocket(user2);
-
-        this.RegisterEvent();
     }
 
     RegisterEvent() {
@@ -83,8 +98,12 @@ class GameRoom implements RoomClient {
         Send("room" + this.id, eveentName, message);
     }
 
-    CheckRoomClose() {
-        if(this.isActive == false)
+    CheckRoomClose = ()=>{
+        return true;
+    }
+
+    RealCheckRoomClose() {
+        if (this.isActive == false)
             return false;
 
         const io = GetIO();
@@ -94,6 +113,7 @@ class GameRoom implements RoomClient {
 
         return true;
     }
+    
 
     SendTurn() {
         const currentTurn = this.turn.currentTurn;
@@ -104,6 +124,20 @@ class GameRoom implements RoomClient {
 
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_TURN, NetworkService.InGameTurn(turn));
         }
+    }
+
+    SendFirstCard(){
+        for (let i = 0; i < this.users.length; i++) {
+            this.DrawCard(i);
+            this.DrawCard(i);
+            const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0], this.users[i].hand.cards[1]);
+            Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_FIRST_CARD, firstCard);
+        }
+    }
+
+    DrawCard(userIndex:number){
+        const card:number = this.users[userIndex].deck.Draw();
+        this.users[userIndex].hand.AddCard(card);
     }
 
     RegisterEndAbility(ability: Ability) {

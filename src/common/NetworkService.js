@@ -28,6 +28,13 @@ class NetworkService{
             "winId":winId,
         }
     }
+
+    static FirstCard = (card1, card2)=>{
+        return{
+            "card1": { "id": card1},
+            "card2": { "id": card2 },
+        }
+    }
 }
 
 module.exports = {NetworkService, GetSocket, Send, GetIO};
