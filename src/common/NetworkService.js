@@ -39,8 +39,8 @@ class NetworkService{
         const card11 = NetworkService.Card(card1);
         const card22 = NetworkService.Card(card2);
         return{
-            "card1": { card11 },
-            "card2": { card22 },
+            "card1": card11,
+            "card2": card22,
         }
     }
 }
