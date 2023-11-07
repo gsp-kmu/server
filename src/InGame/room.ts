@@ -118,9 +118,14 @@ class GameRoom implements RoomClient {
     SendTurn() {
         const currentTurn = this.turn.currentTurn;
         for (let i = 0; i < this.users.length; i++) {
-            let turn = '0';
-            if (i != currentTurn)
+            let turn = '1';
+            if (i == currentTurn){
+                setTimeout(()=>{
+                    const card = this.users[i].Draw();
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
+                }, 2000);
                 turn = '1';
+            }
 
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_TURN, NetworkService.InGameTurn(turn));
         }

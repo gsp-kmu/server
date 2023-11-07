@@ -22,6 +22,7 @@ export class GameUser{
     Draw(){
         const card:number = this.deck.Draw();
         this.hand.AddCard(card);
+        return card;
     }
 
     getOneValue() {
