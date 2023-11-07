@@ -128,16 +128,10 @@ class GameRoom implements RoomClient {
 
     SendFirstCard(){
         for (let i = 0; i < this.users.length; i++) {
-            this.DrawCard(i);
-            this.DrawCard(i);
+            this.users[i].Draw();
             const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0], this.users[i].hand.cards[1]);
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_FIRST_CARD, firstCard);
         }
-    }
-
-    DrawCard(userIndex:number){
-        const card:number = this.users[userIndex].deck.Draw();
-        this.users[userIndex].hand.AddCard(card);
     }
 
     RegisterEndAbility(ability: Ability) {

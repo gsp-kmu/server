@@ -19,6 +19,11 @@ export class GameUser{
         this.discardHolder = new DiscardHolder();
     }
 
+    Draw(){
+        const card:number = this.deck.Draw();
+        this.hand.AddCard(card);
+    }
+
     getOneValue() {
         return this.numberHold[0];
     }
