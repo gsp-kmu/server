@@ -1,3 +1,7 @@
+const Info = require('../common/Info');
+
+const { GetIO, GetSocket } = require('../common/NetworkService');
+
 const { roomService } = require("../match/RoomService");
 const { DestroyRoom } = require("../util/database");
 
@@ -19,6 +23,17 @@ module.exports = class GameController {
             if (this.rooms[i].CheckRoomClose() == false){
                 console.log("삭제됨");
                 DestroyRoom(this.rooms[i].id);
+                for(let j = 0;j<this.rooms[i].users.length;j++){
+                    const socket = GetSocket(this.rooms[i].users[j].socketId);
+                    socket.leave("room" + this.rooms[i].id);
+
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_TURN_END);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.TEST);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_PLAY_CARD);
+                }
+                const io = GetIO();
+                io.sockets.adapter.del("room" + this.rooms[i].id);
+
                 this.rooms.splice(i, 1);
                 
                 break;

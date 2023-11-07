@@ -53,6 +53,8 @@ class GameRoom implements RoomClient {
     RegisterEvent() {
         for (let i = 0; i < Info.MAX_PLAYER; i++) {
             const socket = GetSocket(this.users[i].socketId);
+            const io = GetIO();
+            const room = io.of('/room' + this.id);
 
             socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END, () => {
                 // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
