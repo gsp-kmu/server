@@ -63,7 +63,11 @@ class GameRoom implements RoomClient {
 
             socket.on(Info.EVENT_MESSAGE.TEST, (data: any) => {
                 console.log(i, "  test:  ", data);
-            })
+            });
+            
+            socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, (data:any)=>{
+                
+            });
         }
     }
 
