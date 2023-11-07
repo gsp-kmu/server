@@ -1,7 +1,7 @@
 import { Card } from "./Card/Card";
 
 export class Deck{
-    cards: Array<number>
+    cards: Array<number>;
     constructor(cards:Array<number>){
         this.cards = cards;
         this.Shuffle();

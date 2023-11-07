@@ -7,6 +7,7 @@ const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
+import { CardFactory } from "./Card/CardFactory";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
@@ -66,9 +67,23 @@ class GameRoom implements RoomClient {
             });
             
             socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, (data:any)=>{
-                
+                if (i == this.turn.GetTurn()) {
+                    this.PlayCard(i, data);
+                    this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, data);
+                    const a = this.users[0].holder[0].number * 10 + this.users[0].holder[1].number;
+                    const b = this.users[1].holder[0].number * 10 + this.users[1].holder[1].number;
+
+                    console.log("room" + this.id, ": user1 number: ", a);
+                    console.log("room" + this.id, ": user2 number: ", b);
+                }
             });
         }
+    }
+
+    PlayCard(id:number, data:any){
+        const cardId = this.users[id].Play(data.cardIndex);
+        const card = CardFactory.GetCard(id, cardId, data);
+        card.Use(this);
     }
 
     Update() {
@@ -76,13 +91,13 @@ class GameRoom implements RoomClient {
     }
 
     TurnUpdate() {
-        if (this.turn.CheckTurnEnd() == false) {
+        if (this.turn.CheckTurnEnd() == true) {
             this.isActive = false;
             this.PlayEndAbility();
             const result = resultService.CalculateResult(this.users[0], this.users[1]);
             const winSocketId: string = result.user.socketId;
 
-            console.log("얘가 승리함 ㅅㄱ", winSocketId);
+            console.log("room" + this.id, ": 얘가 승리함 ㅅㄱ", winSocketId);
 
             for (let i = 0; i < this.users.length; i++) {
                 SetUserState(this.users[i].socketId, Info.userState.Join);
@@ -153,8 +168,8 @@ class GameRoom implements RoomClient {
         }
     }
 
-    GetUsers() {
-        return this.users;
+    GetUser(id:number):GameUser {
+        return this.users[id];
     }
 }
 

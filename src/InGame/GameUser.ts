@@ -1,22 +1,24 @@
 import { Card } from "./Card/Card";
 import {Deck} from "./Deck";
 import {Hand} from "./Hand";
-import { DiscardHolder } from "./DisCardHolder";
+import { Holder } from "./Holder";
 
 export class GameUser{
     socketId: string;
-    numberHold: Array<number>;
     deck: Deck;
     hand: Hand;
-    discardHolder: DiscardHolder;
+    holder: Array<Holder>;
 
     constructor(socketId:string, cards:Array<number>){
         this.socketId = socketId;
-        this.numberHold = [0,0];
 
         this.deck = new Deck(cards);
         this.hand = new Hand();
-        this.discardHolder = new DiscardHolder();
+        this.holder = [new Holder(), new Holder()];
+    }
+
+    Play(cardIndex: number){
+        return this.hand.TakeOutCard(cardIndex);
     }
 
     Draw(){
@@ -25,21 +27,30 @@ export class GameUser{
         return card;
     }
 
-    getOneValue() {
-        return this.numberHold[0];
+    getOne():Holder {
+        return this.holder[0];
     }
 
-    getTenValue() {
-        return this.numberHold[1];
+    getTen():Holder {
+        return this.holder[1];
     }
 
-    setOneValue(value:number){
-        this.numberHold[0] = value;
+    setOneValue(number:number){
+        this.holder[0].number = number;
     }
 
-    setTenValue(value:number){
-        this.numberHold[1] = value;
+    setTenValue(number: number) {
+        this.holder[1].number = number;
     }
+
+    AddCardOne(cardId:number, number:number){
+        this.holder[0].AddCard(cardId, number);
+    }
+
+    AddCardTen(cardId: number, number: number) {
+        this.holder[1].AddCard(cardId, number);
+    }
+
 }
 
 function IFtest(cond:boolean){
@@ -47,13 +58,4 @@ function IFtest(cond:boolean){
         console.log("테스트 성공");
     else
         console.log("테스트 실패");
-}
-function test(){
-    const user: GameUser = new GameUser('iosveoniesv', []);
-    IFtest(user.getOneValue() == 0);
-    IFtest(user.getTenValue() == 0);
-    user.setOneValue(50);
-    IFtest(user.getOneValue() == 50);
-    user.setTenValue(103);
-    IFtest(user.getTenValue() == 103);
 }

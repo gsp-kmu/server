@@ -12,17 +12,17 @@ export class Transform extends Ability{
     }
 
     Use(roomClient: RoomClient) {
-        const users = roomClient.GetUsers();
+        const user = roomClient.GetUser(this.myId);
 
         const targetPosition = 1 - this.position;
 
         if (targetPosition == 0){
-            const oneValue = users[this.myId].getOneValue();
-            users[this.myId].setTenValue(oneValue);
+            const one = user.getOne();
+            user.setTenValue(one.number);
         }
         else{
-            const tenValue = users[this.myId].getTenValue();
-            users[this.myId].setOneValue(tenValue);
+            const ten = user.getTen();
+            user.setOneValue(ten.number);
         }
     }
 };

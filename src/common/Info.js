@@ -6,7 +6,7 @@ module.exports =  class Info {
     });
 
     static MAX_PLAYER = Object.freeze(2);
-    static MAX_TURN = 8;
+    static MAX_TURN = 2;
 
     static EVENT_MESSAGE = Object.freeze({
         MATCH_START:'match_start',
