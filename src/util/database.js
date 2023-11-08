@@ -120,5 +120,13 @@ async function test2(){
     console.log(cards);
 }
 
+async function test3(){
+    const deck = await Deck.create({
+        name:"hi",
+    });
 
-test2();
+    const cards = await Card.findAll();
+    deck.addCards(cards);
+}
+
+//test3();

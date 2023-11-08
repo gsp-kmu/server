@@ -4,8 +4,8 @@ import { Card } from "./Card";
 
 export class TransformCard extends Card {
     ability: Ability
-    constructor(id: number, number:number) {
-        super(number);
+    constructor(id: number, number:number, data:any) {
+        super(id, number, data);
         this.number = 0;
         this.ability = new Transform(id);
     }

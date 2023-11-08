@@ -18,11 +18,11 @@ export class Transform extends Ability{
 
         if (targetPosition == 0){
             const one = user.getOne();
-            user.setTenValue(one.number);
+            user.holder[1].SetNumber(one.GetNumber());
         }
         else{
             const ten = user.getTen();
-            user.setOneValue(ten.number);
+            user.holder[0].SetNumber(ten.GetNumber());
         }
     }
 };

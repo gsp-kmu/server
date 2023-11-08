@@ -1,5 +1,6 @@
 import { GameUser } from './GameUser';
 import { Holder } from './Holder';
+import { Digit } from '../common/Digit';
 
 class ResultService {
     CalculateResult(user1:GameUser, user2:GameUser){
@@ -23,7 +24,7 @@ class ResultService {
     }
 
     CalculateNumber(numberHold:Array<Holder>){
-        return numberHold[0].number * 10 + numberHold[1].number;
+        return numberHold[Digit.ten].GetNumber() * 10 + numberHold[Digit.one].GetNumber();
     }
 }
 

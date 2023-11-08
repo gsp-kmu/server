@@ -35,12 +35,12 @@ export class GameUser{
         return this.holder[1];
     }
 
-    setOneValue(number:number){
-        this.holder[0].number = number;
+    RmoveCardOne(){
+        this.holder[0].RemoveCard(this.holder[0].length()-1);
     }
 
-    setTenValue(number: number) {
-        this.holder[1].number = number;
+    RemoveCardTen(){
+        this.holder[1].RemoveCard(this.holder[1].length()-1);
     }
 
     AddCardOne(cardId:number, number:number){

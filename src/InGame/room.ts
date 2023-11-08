@@ -72,8 +72,8 @@ class GameRoom implements RoomClient {
                 if (i == this.turn.GetTurn()) {
                     this.PlayCard(i, data);
                     this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, data);
-                    const a = this.users[0].holder[0].number * 10 + this.users[0].holder[1].number;
-                    const b = this.users[1].holder[0].number * 10 + this.users[1].holder[1].number;
+                    const a = this.users[0].holder[1].GetNumber() * 10 + this.users[0].holder[0].GetNumber();
+                    const b = this.users[1].holder[1].GetNumber() * 10 + this.users[1].holder[0].GetNumber();
 
                     console.log("room" + this.id, ": user1 number: ", a);
                     console.log("room" + this.id, ": user2 number: ", b);
