@@ -83,7 +83,7 @@ app.post("/savedeck", async(req, res)=> {
         const ChangeDeck = require('./src/deck/ChangeDeck.ts');
         const {userId, deckList} = req.body;
 
-        console.log(userId + "번 유저가 덱 저장을 시도합니다.");
+        console.log(userId + "번 유저가 덱 저장을 시도하려 합니다.");
         const module = new ChangeDeck(userId, deckList);
         const execute = await module.saveDeck();
 
