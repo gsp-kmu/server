@@ -1,6 +1,9 @@
+import { sequelize } from "../../models";
+
 class GetDeck{
     Deck = require('../../models/deck');
     Card = require("../../models/card");
+    DeckCard = require('../../models/deckcard');
 
     userId:number;
     
@@ -29,8 +32,14 @@ class GetDeck{
                 let tmp:number[] = [];
                 
                 for(let j = 0; j<cards.length; j++){
-                    console.log(cards[j].id);
-                    tmp.push(cards[j].id);
+                    console.log(cards.length + " " + cards[j].id);
+                    const query = 'SELECT * FROM deckcard where DeckId IN (SELECT id FROM decks WHERE UserId = ? AND name = ? ) AND CardId = ? '
+                    const number = await sequelize.query(query,{
+                        replacements: [this.userId, i.toString(), cards[j].id]
+                    });
+                    for(let k = 0; k<number[0][0].count; k++){
+                        tmp.push(cards[j].id);
+                    }
                 }
 
                 deckList.push(tmp);
