@@ -28,9 +28,6 @@ app.use('/random', (req, res) => {
 // 회원가입
 app.post("/register", async (req, res) => {
     const LoginSystem = require("./src/util/LoginSystem");
-    console.log(typeof(req));
-    console.log(typeof(req.body));
-    console.log(req.body);
 
     const {id, password} = req.body;
 
