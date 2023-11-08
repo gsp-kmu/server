@@ -155,6 +155,7 @@ class GameRoom implements RoomClient {
     SendFirstCard(){
         for (let i = 0; i < this.users.length; i++) {
             this.users[i].Draw();
+            this.users[i].Draw();
             const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0], this.users[i].hand.cards[1]);
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_FIRST_CARD, firstCard);
         }
