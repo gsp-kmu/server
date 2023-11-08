@@ -35,6 +35,9 @@ class GameRoom implements RoomClient {
             const gameUser2 = new GameUser(user2, cards2);
             this.users.push(gameUser2);
 
+            for(let j=0;j<this.users.length;j++){
+                Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
+            }
             this.socket1 = GetSocket(user1);
             this.socket2 = GetSocket(user2);
 

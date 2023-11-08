@@ -13,6 +13,7 @@ module.exports =  class Info {
         MATCH_SUCCESS:'match_success',
         MATCH_CANCEL: 'match_cancel',
         MATCH_END:'match_end',
+        INGAME_INIT_ID: 'ingame_init_id',
         INGAME_END:'ingame_end',
         SOCKET_LOGIN:'socket_login',
         INGAME_TURN:'ingame_turn',
