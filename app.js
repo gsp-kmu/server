@@ -8,11 +8,13 @@ const webSocket = require('./socket');
 const io = require("./socket").io;
 const MainService = require('./src/MainController');
 const RandomService = require('./src/shop/randomCard');
+const { CreateCard } = require('./src/util/database.js');
 const app = express();
 
 sequelize.sync({force:false})
     .then(()=>{
         console.log('데이터베이스 연결 됨');
+        CreateCard();
     })
     .catch((error) => {
         console.log(error);
@@ -89,7 +91,8 @@ app.post("/savedeck", async(req, res)=> {
         else if(execute == 1) res.status(200).send("All decks are updated");
         else if(execute == 2) res.status(401).send("Deck update Failed");
     }
-    catch{
+    catch(err){
+        console.log(err);
         res.status(402).send("Format Error");
     }
 });
@@ -103,7 +106,6 @@ app.post("/getdeck", async(req, res)=> {
         console.log(userId + "번 유저가 덱 목록을 얻을려고 시도합니다.");
         const module = new GetDeck(userId);
         const decklist = await module.getDeckList();
-        console.log(decklist);
 
         res.status(200).json({msg:"All decks are updated",deckList:decklist});
     }
@@ -121,9 +123,8 @@ const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 대기중');
 });
 
-
-webSocket(server);
-
+const _io = webSocket(server);
+require("./src/common/NetworkService").InitIO(_io);
 const mainService = new MainService();
 const randomService = new RandomService();
 mainService.Start();
