@@ -5,6 +5,7 @@ dotenv.config();
 
 const {sequelize} = require('./models');
 const webSocket = require('./socket');
+const io = require("./socket").io;
 const MainService = require('./src/MainController');
 const RandomService = require('./src/shop/randomCard');
 const app = express();
@@ -35,9 +36,11 @@ app.post("/register", async (req, res) => {
     const execute = await module.Register();
 
     if(execute == true){
+        console.log(id + "님이 회원가입 하셨습니다.");
         res.status(200).send('success register');
     }
     else{
+        console.log(id + "님은 이미 등록된 회원입니다.");
         res.status(400).send('duplicate username : ${id}');
     }
 })
@@ -50,11 +53,12 @@ app.post("/login", async (req, res) => {
     const module = new LoginSystem(id, password);
     const execute = await module.Login();
 
-    console.log(execute);
     if(execute == true){
+        console.log(id + "님이 로그인하셨습니다.");
         res.status(200).send('success login');
     }
     else{
+        console.log(id + "님은 등록되지 않은 회원입니다.");
         res.status(400).send('failed username : ${id}');
     }
 });
@@ -64,6 +68,7 @@ app.post("/builddeck", async(req, res) => {
     const BuildDeck = require('./src/deck/BuildDeck.ts');
     const {name, userId} = req.body;
 
+    console.log(userId + "번 유저가 " + name + " 덱 생성을 시도합니다.");
     const module = new BuildDeck(name, userId);
     const execute = await module.CreateDeck();
 
@@ -78,6 +83,7 @@ app.post("/changedeck", async(req, res)=> {
     const ChangeDeck = require('./src/deck/ChangeDeck.ts');
     const {name, userId, deckList} = req.body;
 
+    console.log(userId + "번 유저가 " + name + " 덱 변경을 시도합니다.");
     const module = new ChangeDeck(name, userId, deckList);
     const execute = await module.ModifyDeck();
 
@@ -90,6 +96,7 @@ app.post("/deletedeck", async(req, res)=> {
     const DeleteDeck = require('./src/deck/DeleteDeck.ts');
     const {name, userId} = req.body;
 
+    console.log(userId + "번 유저가 " + name + " 덱 제거를 시도합니다.");
     const module = new DeleteDeck(name, userId);
     const execute = await module.DeleteDeck();
     
@@ -107,8 +114,8 @@ const server = app.listen(app.get('port'), () => {
 });
 
 
-const _io = webSocket(server);
-require("./src/common/NetworkService").InitIO(_io);
+webSocket(server);
+
 const mainService = new MainService();
 const randomService = new RandomService();
 mainService.Start();
