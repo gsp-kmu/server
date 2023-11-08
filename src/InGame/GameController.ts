@@ -1,11 +1,14 @@
-import {Card} from "./Card/Card";
-const { roomService } = require("../match/RoomService");
-import { RoomClient } from "./RoomClient";
+const Info = require('../common/Info');
 
-class GameController {
+const { GetIO, GetSocket } = require('../common/NetworkService');
+
+const { roomService } = require("../match/RoomService");
+const { DestroyRoom } = require("../util/database");
+
+module.exports = class GameController {
     rooms: any;
     constructor(){
-        this.rooms = roomService.rooms;;
+        this.rooms = roomService.rooms;
         console.log("length는?: ", roomService.rooms.length);
     }
     
@@ -17,9 +20,22 @@ class GameController {
             //console.log(this.rooms);
             //console.log(this.rooms[i]);
 
-            if(this.rooms[i].CheckUserConnected() == false){
+            if (this.rooms[i].CheckRoomClose() == false){
                 console.log("삭제됨");
+                DestroyRoom(this.rooms[i].id);
+                for(let j = 0;j<this.rooms[i].users.length;j++){
+                    const socket = GetSocket(this.rooms[i].users[j].socketId);
+                    socket.leave("room" + this.rooms[i].id);
+
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_TURN_END);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.TEST);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_PLAY_CARD);
+                }
+                const io = GetIO();
+                io.sockets.adapter.del("room" + this.rooms[i].id);
+
                 this.rooms.splice(i, 1);
+                
                 break;
             }
             this.rooms[i].Update();
@@ -27,4 +43,4 @@ class GameController {
     }
 }
 
-module.exports = GameController;
+

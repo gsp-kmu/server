@@ -1,5 +1,3 @@
-const { Model } = require('sequelize');
-
 let io = null;
 
 function GetSocket(socketId){
@@ -24,9 +22,30 @@ class NetworkService{
             "turn":turn,
         }
     };
+
+    static InGameEnd = (winId)=>{
+        return {
+            "winId":winId,
+        }
+    }
+
+    static Card = (card)=>{
+        return {
+            'id':card,
+        }
+    }
+
+    static FirstCard = (card1, card2)=>{
+        const card11 = NetworkService.Card(card1);
+        const card22 = NetworkService.Card(card2);
+        return{
+            "card1": card11,
+            "card2": card22,
+        }
+    }
 }
-module.exports.NetworkService = NetworkService;
-module.exports = {GetSocket, Send, GetIO};
+
+module.exports = {NetworkService, GetSocket, Send, GetIO};
 module.exports.InitIO =(_io)=>{
     io = _io;
 }

@@ -1,7 +1,8 @@
 import { Ability } from "./Ability/Ability";
+import { GameUser } from "./GameUser";
 
 export interface RoomClient{
-    GetUsers();
+    GetUser(id:number):GameUser;
 
     RegisterEndAbility(ability: Ability);
     PlayEndAbility();

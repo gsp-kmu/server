@@ -37,18 +37,6 @@ UserState.associate(db);
 Room.associate(db);
 
 
-CreateCard('변신');
-CreateCard('바꿔치고 사기치고');
-CreateCard('빙의');
-CreateCard('작렬하는 태양');
-CreateCard('저격');
-CreateCard('저주의 편지');
-CreateCard('못된 장난');
-CreateCard('예언');
-CreateCard('천지 역전');
-CreateCard('천사의 요람');
-
-
 function CreateCard(name){
     Card.findOrCreate({
         where:{'name':name},

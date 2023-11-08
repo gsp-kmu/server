@@ -1,7 +1,6 @@
 const Room = require('../../models/room');
 const GameRoom = require('../InGame/room');
 const { GetSocket } = require('../common/NetworkService');
-const io = require('../common/NetworkService').io;
 
 class RoomService{
     rooms = [];

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = class Card extends Sequelize.Model {
-    static async init(sequelize) {
+    static init(sequelize) {
         return super.init({
             name:{
                 type:Sequelize.STRING(40),

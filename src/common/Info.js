@@ -1,4 +1,4 @@
-class Info {
+module.exports =  class Info {
     static userState = Object.freeze({
         Join:'JOIN',
         Match:'MATCH',
@@ -6,7 +6,7 @@ class Info {
     });
 
     static MAX_PLAYER = Object.freeze(2);
-    static MAX_TURN = 8;
+    static MAX_TURN = 2;
 
     static EVENT_MESSAGE = Object.freeze({
         MATCH_START:'match_start',
@@ -17,8 +17,11 @@ class Info {
         SOCKET_LOGIN:'socket_login',
         INGAME_TURN:'ingame_turn',
         INGAME_TURN_END:'ingame_turn_end',
+        INGAME_END_WIN:'ingame_end_win',
+        INGAME_END_LOSE:'ingame_end_lose',
+        INGAME_FIRST_CARD:'ingame_first_card',
+        INGAME_DRAW_CARD:'ingame_draw_card',
+        INGAME_PLAY_CARD:'ingame_play_card',
         TEST:'test',
     })
 }
-
-module.exports = Info;
