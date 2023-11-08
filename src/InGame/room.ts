@@ -8,6 +8,7 @@ import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 import { CardFactory } from "./Card/CardFactory";
+import { eventNames } from "process";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
@@ -118,8 +119,10 @@ class GameRoom implements RoomClient {
         }
     }
 
-    SendMessage(eveentName: string, message: any) {
-        Send("room" + this.id, eveentName, message);
+    SendMessage(eventName: string, message: any) {
+        for(let i=0;i<this.users.length;i++){
+            Send(this.users[i].socketId, eventName, message)
+        }
     }
 
     CheckRoomClose = ()=>{
