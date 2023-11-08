@@ -23,6 +23,9 @@ export class Holder{
     }
 
     GetNumber():number{
+        if(this.number.length == 0)
+            return 0;
+        
         return this.number[this.number.length-1];
     }
 

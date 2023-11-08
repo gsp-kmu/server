@@ -47,6 +47,7 @@ async function AddUserWinLose(socketId, winValue, loseValue){
 
 }
 
+
 async function CreateCard(){
     const CreateCardF = (name)=>{
             Card.findOrCreate({
@@ -56,16 +57,26 @@ async function CreateCard(){
                 }
             });
         }
-    CreateCardF('변신');
-    CreateCardF('바꿔치고 사기치고');
-    CreateCardF('빙의');
-    CreateCardF('작렬하는 태양');
-    CreateCardF('저격');
-    CreateCardF('저주의 편지');
-    CreateCardF('못된 장난');
-    CreateCardF('예언');
-    CreateCardF('천지 역전');
-    CreateCardF('천사의 요람');
+    CreateCardF('구미호');
+    CreateCardF('메지션');
+    CreateCardF('영매사');
+    CreateCardF('솔');
+    CreateCardF('스나이퍼');
+    CreateCardF('흑화 아이코');
+    CreateCardF('다크 엘프');
+    CreateCardF('점술사');
+    CreateCardF('테라');
+    CreateCardF('대천사');
+    CreateCardF('사신');
+    CreateCardF('해커');
+    CreateCardF('아이코');
+    CreateCardF('삐에로');
+    CreateCardF('네크로멘서');
+    CreateCardF('시스터');
+    CreateCardF('타락천사');
+    CreateCardF('메두사');
+    CreateCardF('엘프');
+    CreateCardF('루나');
 }
 async function GetDeck(deckId){
     const deck = await Deck.findOne({
