@@ -48,7 +48,7 @@ class LoginSystem{
                 id,
             },
         },);
-        console.log(salt.salt);
+
         crypto.pbkdf2(this._password, salt.salt, 104906, 64, 'sha512', (err, key) => {
             if(err) rejects(err);
             else resolve({hashed : key.toString('base64'), salt});
