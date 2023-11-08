@@ -25,6 +25,9 @@ module.exports = class GameController {
                 DestroyRoom(this.rooms[i].id);
                 for(let j = 0;j<this.rooms[i].users.length;j++){
                     const socket = GetSocket(this.rooms[i].users[j].socketId);
+                    if(socket == undefined)
+                        continue;
+                    
                     socket.leave("room" + this.rooms[i].id);
 
                     socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_TURN_END);
