@@ -22,6 +22,13 @@ export class Holder{
         this.number.slice(index,1);
     }
 
+    GetCardId():number{
+        if(this.cards.length == 0)
+            return 0;
+        
+        return this.cards[this.number.length-1];
+    }
+
     GetNumber():number{
         if(this.number.length == 0)
             return 0;
