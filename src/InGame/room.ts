@@ -71,11 +71,22 @@ class GameRoom implements RoomClient {
             socket.on(Info.EVENT_MESSAGE.TEST, (data: any) => {
                 console.log(i, "  test:  ", data);
             });
-
-            socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, (data: any) => {
+            
+            socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_SEND, (data:any)=>{
                 if (i == this.turn.GetTurn()) {
+                    const cardId = this.users[i].hand.cards[data.cardIndex];
+                    console.log("받았음 cardIdnex: ", data.cardIndex);
+                    console.log("userHand값은:  ", this.users[i].hand.cards);
+                    let sendData = {
+                        'id':data.id,
+                        'cardId':cardId,
+                        'targetId':data.targetId,
+                        'targetDigit':data.targetDigit,
+                        'targetCardIndex':data.targetCardIndex,
+                    };
+                    console.log('sendData:  ', sendData);
                     this.PlayCard(i, data);
-                    this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, data);
+                    this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_RECV, sendData);
                     const a = this.users[0].holder[1].GetNumber() * 10 + this.users[0].holder[0].GetNumber();
                     const b = this.users[1].holder[1].GetNumber() * 10 + this.users[1].holder[0].GetNumber();
 
@@ -145,9 +156,9 @@ class GameRoom implements RoomClient {
     SendTurn() {
         const currentTurn = this.turn.currentTurn;
         for (let i = 0; i < this.users.length; i++) {
-            let turn = '1';
-            if (i == currentTurn) {
-                setTimeout(() => {
+            let turn = '0';
+            if (i == currentTurn){
+                setTimeout(()=>{
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                 }, 2000);

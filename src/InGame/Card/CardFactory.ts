@@ -11,6 +11,7 @@ import { FallenAngelCard } from "./FallenAngelCard";
 
 export class CardFactory {
     static GetCard(userId:number, cardId: number, data:any) {
+        console.log("cardFactory id: ", cardId);
         const randomIndex = Util.GetRandomNumber(0, 2);
         //if(cardId == 3)
             //return new SolCard(userId, 3, data);
