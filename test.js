@@ -36,12 +36,20 @@ const select = async () => {
 
 // main
 
-sequelize.sync({ force: false })
-    .then(() => {
-        console.log('데이터베이스 연결 됨');
-        create();
-        select();
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+// sequelize.sync({ force: false })
+//     .then(() => {
+//         console.log('데이터베이스 연결 됨');
+//         create();
+//         select();
+//     })
+//     .catch((error) => {
+//         console.log(error);
+//     });
+
+const a = {
+    a:2,
+}
+
+a.a = 5;
+
+console.log(a);

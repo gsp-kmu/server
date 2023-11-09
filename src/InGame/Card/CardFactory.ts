@@ -10,6 +10,7 @@ import { NecromancerCard } from "./NecromancerCard";
 import { FallenAngelCard } from "./FallenAngelCard";
 import { MedusaCard } from "./MedusaCard";
 import { ElfCard } from "./ElfCard";
+import { LunaCard } from "./LunarCard";
 
 export class CardFactory {
     static GetCard(userId:number, cardId: number, data:any) {
@@ -56,7 +57,7 @@ export class CardFactory {
         else if(cardId == 19)
             return new ElfCard(userId, 8, data);
         else if(cardId == 20)
-            return new Card(userId, 9, data);
+            return new LunaCard(userId, 9, data);
 
         return new Card(userId, 5, data);
     }
