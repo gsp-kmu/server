@@ -1,4 +1,3 @@
-const Turn = require("./turn");
 const Info = require('../common/Info');
 const resultService = require('./ResultService').resultService;
 const { Send, GetIO, GetSocket } = require('../common/NetworkService');
@@ -9,13 +8,14 @@ import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 import { CardFactory } from "./Card/CardFactory";
 import { eventNames } from "process";
+import Turn from "./turn";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
     users: GameUser[];
     endAbility: Ability[];
     id: any;
-    turn: any;
+    turn: Turn;
     socket1: any;
     socket2: any;
 
@@ -62,7 +62,7 @@ class GameRoom implements RoomClient {
 
             socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END, () => {
                 // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
-                if (i == this.turn.GetTurn()) {
+                if (i == this.turn.GetTurn() && this.turn.isCurrentTurnProgress == true) {
                     this.turn.NextTurn();
                     this.SendTurn();
                 }
@@ -74,6 +74,7 @@ class GameRoom implements RoomClient {
             
             socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_SEND, (data:any)=>{
                 if (i == this.turn.GetTurn()) {
+                    this.turn.isCurrentTurnProgress = true;
                     const cardId = this.users[i].hand.cards[data.cardIndex];
                     console.log("받았음 cardIdnex: ", data.cardIndex);
                     console.log("userHand값은:  ", this.users[i].hand.cards);

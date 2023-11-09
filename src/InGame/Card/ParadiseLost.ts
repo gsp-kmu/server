@@ -1,6 +1,6 @@
 import { GameUser } from "../GameUser";
 import { RoomClient } from "../RoomClient";
-import { Ability } from "./Ability";
+import { Ability } from "../Ability/Ability";
 import { Digit } from "../../common/Digit";
 
 export class ParadiseLost extends Ability {

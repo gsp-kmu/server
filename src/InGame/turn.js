@@ -5,6 +5,7 @@ class Turn{
         this.length = length;
         this.currentTurn = Utill.GetRandomNumber(0, length);
         this.currentTurnCount = 0;
+        this.isCurrentTurnProgress = false;
     }
 
     GetTurn(){
@@ -12,6 +13,7 @@ class Turn{
     }
 
     NextTurn(){
+        this.isCurrentTurnProgress = false;
         this.currentTurn = (this.currentTurn + 1) % this.length;
         this.currentTurnCount++;
         console.log("현재턴: ", this.currentTurnCount);

@@ -1,14 +1,14 @@
-import { ParadiseLost } from "./ParadiseLost";
+import { Rock } from "../Ability/Rock";
 import { Ability } from "../Ability/Ability";
 import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
 
-export class FallenAngelCard extends Card {
+export class MedusaCard extends Card {
     ability: Ability
     constructor(id: number, number:number, data:any) {
         super(id, number, data);
         this.number = number;
-        this.ability = new ParadiseLost(this.id);
+        this.ability = new Rock(this.id);
     }
 
     Use(roomClient:RoomClient){

@@ -8,6 +8,8 @@ import { Aico } from "./Aico";
 import { HackerCard } from "./HackerCard";
 import { NecromancerCard } from "./NecromancerCard";
 import { FallenAngelCard } from "./FallenAngelCard";
+import { MedusaCard } from "./MedusaCard";
+import { ElfCard } from "./ElfCard";
 
 export class CardFactory {
     static GetCard(userId:number, cardId: number, data:any) {
@@ -50,9 +52,9 @@ export class CardFactory {
         else if(cardId == 17)
             return new FallenAngelCard(userId, 6, data);
         else if(cardId == 18)
-            return new Card(userId, 7, data);
+            return new MedusaCard(userId, 7, data);
         else if(cardId == 19)
-            return new Card(userId, 8, data);
+            return new ElfCard(userId, 8, data);
         else if(cardId == 20)
             return new Card(userId, 9, data);
 
