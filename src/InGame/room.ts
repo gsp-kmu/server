@@ -180,6 +180,10 @@ class GameRoom implements RoomClient {
     GetUser(id:number):GameUser {
         return this.users[id];
     }
+
+    GetUsers(): GameUser[] {
+        return this.users;
+    }
 }
 
 module.exports = GameRoom;
