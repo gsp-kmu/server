@@ -7,6 +7,7 @@ import { TransformCard } from "./TransformCard";
 import { Aico } from "./Aico";
 import { HackerCard } from "./HackerCard";
 import { NecromancerCard } from "./NecromancerCard";
+import { FallenAngelCard } from "./FallenAngelCard";
 
 export class CardFactory {
     static GetCard(userId:number, cardId: number, data:any) {
@@ -46,7 +47,7 @@ export class CardFactory {
         else if(cardId == 16)
             return new Card(userId, 5, data);
         else if(cardId == 17)
-            return new Card(userId, 6, data);
+            return new FallenAngelCard(userId, 6, data);
         else if(cardId == 18)
             return new Card(userId, 7, data);
         else if(cardId == 19)

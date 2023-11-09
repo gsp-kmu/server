@@ -1,7 +1,7 @@
 const Turn = require("./turn");
-const Info  = require('../common/Info');
+const Info = require('../common/Info');
 const resultService = require('./ResultService').resultService;
-const { Send, GetIO, GetSocket} = require('../common/NetworkService');
+const { Send, GetIO, GetSocket } = require('../common/NetworkService');
 const { SetUserState, AddUserWinLose, GetDeckCards } = require('../util/database');
 const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
@@ -27,16 +27,16 @@ class GameRoom implements RoomClient {
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
 
-        GetDeckCards(1).then(async (cards:Array<number>)=>{
+        GetDeckCards(1).then(async (cards: Array<number>) => {
             console.log("cards: ", cards);
             const gameUser1 = new GameUser(user1, cards);
             this.users.push(gameUser1);
-            
+
             const cards2 = await GetDeckCards(1);
             const gameUser2 = new GameUser(user2, cards2);
             this.users.push(gameUser2);
 
-            for(let j=0;j<this.users.length;j++){
+            for (let j = 0; j < this.users.length; j++) {
                 Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
             }
             this.socket1 = GetSocket(user1);
@@ -49,7 +49,7 @@ class GameRoom implements RoomClient {
         });
     }
 
-    SendInitMessage(){
+    SendInitMessage() {
         this.SendFirstCard();
         this.SendTurn();
     }
@@ -71,8 +71,8 @@ class GameRoom implements RoomClient {
             socket.on(Info.EVENT_MESSAGE.TEST, (data: any) => {
                 console.log(i, "  test:  ", data);
             });
-            
-            socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, (data:any)=>{
+
+            socket.on(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, (data: any) => {
                 if (i == this.turn.GetTurn()) {
                     this.PlayCard(i, data);
                     this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_CARD, data);
@@ -86,7 +86,7 @@ class GameRoom implements RoomClient {
         }
     }
 
-    PlayCard(id:number, data:any){
+    PlayCard(id: number, data: any) {
         const cardId = this.users[id].Play(data.cardIndex);
         const card = CardFactory.GetCard(id, cardId, data);
         card.Use(this);
@@ -107,11 +107,11 @@ class GameRoom implements RoomClient {
 
             for (let i = 0; i < this.users.length; i++) {
                 SetUserState(this.users[i].socketId, Info.userState.Join);
-                if (winSocketId == this.users[i].socketId){
+                if (winSocketId == this.users[i].socketId) {
                     AddUserWinLose(winSocketId, 1, 0);
                     Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
                 }
-                else{
+                else {
                     AddUserWinLose(this.users[i].socketId, 0, 1);
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
                 }
@@ -120,12 +120,12 @@ class GameRoom implements RoomClient {
     }
 
     SendMessage(eventName: string, message: any) {
-        for(let i=0;i<this.users.length;i++){
+        for (let i = 0; i < this.users.length; i++) {
             Send(this.users[i].socketId, eventName, message)
         }
     }
 
-    CheckRoomClose = ()=>{
+    CheckRoomClose = () => {
         return true;
     }
 
@@ -140,14 +140,14 @@ class GameRoom implements RoomClient {
 
         return true;
     }
-    
+
 
     SendTurn() {
         const currentTurn = this.turn.currentTurn;
         for (let i = 0; i < this.users.length; i++) {
             let turn = '1';
-            if (i == currentTurn){
-                setTimeout(()=>{
+            if (i == currentTurn) {
+                setTimeout(() => {
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                 }, 2000);
@@ -158,7 +158,7 @@ class GameRoom implements RoomClient {
         }
     }
 
-    SendFirstCard(){
+    SendFirstCard() {
         for (let i = 0; i < this.users.length; i++) {
             this.users[i].Draw();
             this.users[i].Draw();
@@ -177,7 +177,7 @@ class GameRoom implements RoomClient {
         }
     }
 
-    GetUser(id:number):GameUser {
+    GetUser(id: number): GameUser {
         return this.users[id];
     }
 
