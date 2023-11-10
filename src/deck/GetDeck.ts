@@ -43,11 +43,6 @@ class GetDeck{
                 }
 
                 deckList.push(tmp);
-
-                // const cards2 = await decks.Cards;
-                // cards.map((card)=>{
-                //     return card.id;
-                // });
             }
 
             return deckList;
