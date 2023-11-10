@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 dotenv.config();
 
 const {sequelize} = require('./models');
-const { CreateCard } = require('./src/util/database');
 const webSocket = require('./socket');
+const io = require("./socket").io;
 const MainService = require('./src/MainController');
 const RandomService = require('./src/shop/randomCard');
+const { CreateCard } = require('./src/util/database.js');
 const app = express();
 
 sequelize.sync({force:false})
@@ -29,80 +30,88 @@ app.use('/random', (req, res) => {
 
 // 회원가입
 app.post("/register", async (req, res) => {
-    const LoginSystem = require("./src/util/LoginSystem");
+    try{
+        const LoginSystem = require("./src/util/LoginSystem");
 
-    const {id, password} = req.body;
+        const {id, password} = req.body;
 
-    const module = new LoginSystem(id, password);
-    const execute = await module.Register();
+        const module = new LoginSystem(id, password);
+        const execute = await module.Register();
 
-    if(execute == true){
-        console.log(id + "님이 회원가입 하셨습니다.");
-        res.status(200).send('success register');
+        if(execute == true){
+            console.log(id + "님이 회원가입 하셨습니다.");
+            res.status(200).send('success register');
+        }
+        else{
+            console.log(id + "님은 이미 등록된 회원입니다.");
+            res.status(400).send('duplicate username : ' + id);
+        }
     }
-    else{
-        console.log(id + "님은 이미 등록된 회원입니다.");
-        res.status(400).send('duplicate username : ${id}');
+    catch{
+        res.status(401).send('Format Error');
     }
 })
 
 // 로그인
 app.post("/login", async (req, res) => {
-    const LoginSystem = require("./src/util/LoginSystem");
-    const {id, password} = req.body;
+    try{
+        const LoginSystem = require("./src/util/LoginSystem");
+        const {id, password} = req.body;
 
-    const module = new LoginSystem(id, password);
-    const execute = await module.Login();
+        const module = new LoginSystem(id, password);
+        const execute = await module.Login();
 
-    if(execute == true){
-        console.log(id + "님이 로그인하셨습니다.");
-        res.status(200).send('success login');
+        if(execute != -1){
+            console.log(id + "님이 로그인하셨습니다.");
+            res.status(200).json({msg:'success login',userId : execute});
+        }
+        else{
+            console.log(id + "님은 등록되지 않은 회원입니다.");
+            res.status(400).json({msg:'failed username : ' + id,userId : execute});
+        }
     }
-    else{
-        console.log(id + "님은 등록되지 않은 회원입니다.");
-        res.status(400).send('failed username : ${id}');
+    catch (err){
+        console.log(err);
+        if(err == 'Nan') res.status(401).json({msg:'Non Account'});
+        else res.status(401).json({msg:'Format Error'});
     }
-});
-
-// 덱 생성하기
-app.post("/builddeck", async(req, res) => {
-    const BuildDeck = require('./src/deck/BuildDeck.ts');
-    const {name, userId} = req.body;
-
-    console.log(userId + "번 유저가 " + name + " 덱 생성을 시도합니다.");
-    const module = new BuildDeck(name, userId);
-    const execute = await module.CreateDeck();
-
-    if(execute == 0) res.status(200).send("Success deck build");
-    else if(execute == 1) res.status(400).send("Duplictated deckname : ${name}");
-    else if(execute == 2) res.status(401).send("Deck List Full");
-    else if(execute == 3) res.status(402).send("Exception");
 });
 
 // 덱 편집하기
-app.post("/changedeck", async(req, res)=> {
-    const ChangeDeck = require('./src/deck/ChangeDeck.ts');
-    const {name, userId, deckList} = req.body;
+app.post("/savedeck", async(req, res)=> {
+    try{
+        const ChangeDeck = require('./src/deck/ChangeDeck.ts');
+        const {userId, deckList} = req.body;
 
-    console.log(userId + "번 유저가 " + name + " 덱 변경을 시도합니다.");
-    const module = new ChangeDeck(name, userId, deckList);
-    const execute = await module.ModifyDeck();
+        console.log(userId + "번 유저가 덱 저장을 시도하려 합니다.");
+        const module = new ChangeDeck(userId, deckList);
+        const execute = await module.saveDeck();
 
-    if(execute == 0) res.status(400).send("Number of Cards is not enough");
-    else if(execute == 1) res.status(200).send("Success change deck");
-    else if(execute == 2) res.status(401).send("Deck change Failed");
+        if(execute == 0) res.status(400).send("All decks are not updated");
+        else if(execute == 1) res.status(200).send("All decks are updated");
+        else if(execute == 2) res.status(401).send("Deck update Failed");
+    }
+    catch(err){
+        console.log(err);
+        res.status(402).send("Format Error");
+    }
 });
 
-app.post("/deletedeck", async(req, res)=> {
-    const DeleteDeck = require('./src/deck/DeleteDeck.ts');
-    const {name, userId} = req.body;
+// 덱 리스트 얻기
+app.post("/getdeck", async(req, res)=> {
+    try{
+        const GetDeck = require('./src/deck/GetDeck.ts');
+        const {userId} = req.body;
 
-    console.log(userId + "번 유저가 " + name + " 덱 제거를 시도합니다.");
-    const module = new DeleteDeck(name, userId);
-    const execute = await module.DeleteDeck();
-    
-    if(execute) res.status(200).send("Success delete deck");
-    else res.status(400).send("Deck delete Failed");
+        console.log(userId + "번 유저가 덱 목록을 얻을려고 시도합니다.");
+        const module = new GetDeck(userId);
+        const decklist = await module.getDeckList();
+
+        res.status(200).json({msg:"All decks are updated",deckList:decklist});
+    }
+    catch{
+        res.status(400).json({msg:"Format Error"});
+    }    
 });
 
 app.use('/test', (req, res) => {
