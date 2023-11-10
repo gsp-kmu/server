@@ -30,16 +30,20 @@ class GetDeck{
                 const cards = await decks.getCards();
                 
                 let tmp:number[] = [];
-                
-                for(let j = 0; j<cards.length; j++){
-                    console.log(cards.length + " " + cards[j].id);
-                    const query = 'SELECT * FROM deckcard where DeckId IN (SELECT id FROM decks WHERE UserId = ? AND name = ? ) AND CardId = ? '
-                    const number = await sequelize.query(query,{
-                        replacements: [this.userId, i.toString(), cards[j].id]
-                    });
-                    for(let k = 0; k<number[0][0].count; k++){
-                        tmp.push(cards[j].id);
+                if(cards.length != 0){
+                    for(let j = 0; j<cards.length; j++){
+                        console.log(cards.length + " " + cards[j].id);
+                        const query = 'SELECT * FROM deckcard where DeckId IN (SELECT id FROM decks WHERE UserId = ? AND name = ? ) AND CardId = ? '
+                        const number = await sequelize.query(query,{
+                            replacements: [this.userId, i.toString(), cards[j].id]
+                        });
+                        for(let k = 0; k<number[0][0].count; k++){
+                            tmp.push(cards[j].id);
+                        }
                     }
+                }
+                else{
+                    tmp.push(0);
                 }
 
                 deckList.push(tmp);
