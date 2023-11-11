@@ -103,6 +103,10 @@ class GameRoom implements RoomClient {
                     console.log("room" + this.id, ": user2 number: ", b);
                 }
             });
+
+            socket.on(Info.EVENT_MESSAGE.INGAME_SURRENDER, (data)=>{
+                this.GameEndLose(this.users[i].socketId);
+            })
         }
     }
 
@@ -124,17 +128,34 @@ class GameRoom implements RoomClient {
             const winSocketId: string = result.user.socketId;
 
             console.log("room" + this.id, ": 얘가 승리함 ㅅㄱ", winSocketId);
+            this.GameEnd(winSocketId);
+        }
+    }
+    
+    GameEndLose(loseSocketId){
+        for (let i = 0; i < this.users.length; i++) {
+            SetUserState(this.users[i].socketId, Info.userState.Join);
+            if (loseSocketId != this.users[i].socketId) {
+                AddUserWinLose(this.users[i].socketId, 1, 0);
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
+            }
+            else {
+                AddUserWinLose(this.users[i].socketId, 0, 1);
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
+            }
+        }
+    }
 
-            for (let i = 0; i < this.users.length; i++) {
-                SetUserState(this.users[i].socketId, Info.userState.Join);
-                if (winSocketId == this.users[i].socketId) {
-                    AddUserWinLose(winSocketId, 1, 0);
-                    Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
-                }
-                else {
-                    AddUserWinLose(this.users[i].socketId, 0, 1);
-                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
-                }
+    GameEnd(winSocketId:string){
+        for (let i = 0; i < this.users.length; i++) {
+            SetUserState(this.users[i].socketId, Info.userState.Join);
+            if (winSocketId == this.users[i].socketId) {
+                AddUserWinLose(winSocketId, 1, 0);
+                Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
+            }
+            else {
+                AddUserWinLose(this.users[i].socketId, 0, 1);
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
             }
         }
     }
