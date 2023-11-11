@@ -3,6 +3,7 @@ const { AddUserId } = require('./src/util/database');
 const { User, Account, UserState } = require('./models');
 const Info = require('./src/common/Info');
 const cryptoModule = require("./src/util/cryptos");
+const { sequelize } = require('./models');
 
 let io = null;
 
@@ -90,16 +91,25 @@ module.exports = (server) => {
             io.sockets.emit('test-message', "테스트 메시지입니다.");
             console.log('테스트 메시지를 클라한테 보냄');
         }
-    })
-
+    });
     process.stdin.on('data', (data) => {
         const input = data.toString().trim();
         if (input == 'allkick') {
             io.sockets.emit('test-message', "you kick bye bye")
-            io.sockets.disconnect();
+            UserState.destroy({
+                where: {},
+                truncate: true,
+            });
         }
-    })
-
+        else if (input.startsWith('db ')) {
+            // 'db'로 시작하는 명령어인 경우
+            const query = input.substring(3); // 'db '를 제외한 나머지 문자열을 추출
+            sequelize.query(query).then((result) => {
+                console.log('쿼리 실행 결과:', result);
+            });
+        }
+    });
+    
     return io;
 }
 
