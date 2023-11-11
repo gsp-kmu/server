@@ -21,7 +21,7 @@ class RandomService{
             }
         })
 
-        for(let i = 0; i<4; i++){
+        for(let i = 0; i<5; i++){
             let tmp = this.Random();
             randomlist.push(tmp);
 
@@ -39,7 +39,8 @@ class RandomService{
                     cardId : tmp
                 }
             })
-
+            
+            console.log(tmp + "를 뽑아서 시도해보는 중입니다 : " + count.count  + "개에요!!");
             console.log(count);
 
             await UserCard.update({
