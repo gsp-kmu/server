@@ -67,6 +67,16 @@ async function CreateCard(){
     CreateCardF('점술사');
     CreateCardF('테라');
     CreateCardF('대천사');
+    CreateCardF('구미호');
+    CreateCardF('메지션');
+    CreateCardF('영매사');
+    CreateCardF('솔');
+    CreateCardF('스나이퍼');
+    CreateCardF('흑화 아이코');
+    CreateCardF('다크 엘프');
+    CreateCardF('점술사');
+    CreateCardF('테라');
+    CreateCardF('대천사');
 }
 async function GetDeck(deckId){
     const deck = await Deck.findOne({
