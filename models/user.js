@@ -36,5 +36,6 @@ module.exports = class User extends Sequelize.Model {
         db.User.hasOne(db.UserState, {foreignKey: 'UserId', sourceKey: 'id'});
         db.User.hasMany(db.Deck, { foreignKey: 'UserId', sourceKey: 'id'})
         db.User.belongsTo(db.Room, { foreignKey: 'RoomId', targetKey: 'id'});
+        db.User.belongsToMany(db.Card, { through: 'UserCard' });
     }
 }
