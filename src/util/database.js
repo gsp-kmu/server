@@ -76,13 +76,19 @@ async function GetDeck(deckId){
     return deck;
 }
 async function GetDeckCards(deckId){
-    const deck = await Deck.findByPk(deckId,{
-        include:Card,
-    });
-    const cards = deck.Cards;
-    return cards.map((card)=>{
-        return card.id;
-    });
+    // const deck = await Deck.findByPk(deckId,{
+    //     include:Card,
+    // });
+    // const cards = deck.Cards;
+    // return cards.map((card)=>{
+    //     return card.id;
+    // });
+    const cards = [];
+    for(let i=1;i<=10;i++){
+        cards.push(i);
+    }
+
+    return cards;
 }
 
 async function GetSocketIdToUser(socketId){
