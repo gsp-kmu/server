@@ -1,27 +1,43 @@
 const Util = require("../../util/utill");
-import { Card } from ".//Card";
+import { Card } from "./Card";
 import { SolCard } from "./SolCard";
+import { BlackAicoCard } from "./BlackAikoCard";
+import { ReaperCard } from "./ReaperCard";
 import { TransformCard } from "./TransformCard";
+import { Aico } from "./Aico";
+import { HackerCard } from "./HackerCard";
+import { NecromancerCard } from "./NecromancerCard";
+import { FallenAngelCard } from "./FallenAngelCard";
+import { MedusaCard } from "./MedusaCard";
+import { ElfCard } from "./ElfCard";
+import { LunaCard } from "./LunarCard";
 
 export class CardFactory {
     static GetCard(userId:number, cardId: number, data:any) {
+        console.log("cardFactory id: ", cardId);
         const randomIndex = Util.GetRandomNumber(0, 2);
         //if(cardId == 3)
             //return new SolCard(userId, 3, data);
         if (cardId == 1)
-            return new Card(userId, 0, data);
+            return new ReaperCard(userId, 0, data, 11);
         else if(cardId == 2)
-            return new Card(userId, 1, data);
+            return new HackerCard(userId, 1, data);
         else if(cardId == 3)
-            return new Card(userId, 2, data);
+            return new Aico(userId, 2, data, cardId);
         else if(cardId == 4)
-            return new Card(userId, 3, data);
+            return new SolCard(userId, 3, data);
         else if (cardId == 5)
-            return new Card(userId, 4, data);
+            return new NecromancerCard(userId, 4, data);
         else if(cardId == 6)
-            return new Card(userId, 5, data);
+            return new BlackAicoCard(userId, 5, data, cardId);
         else if(cardId == 7)
-            return new Card(userId, 6, data);
+            return new FallenAngelCard(userId, 6, data);
+        else if(cardId == 8)
+            return new MedusaCard(userId, 7, data);
+        else if(cardId == 9)
+            return new ElfCard(userId, 8, data);
+        else if(cardId ==10)
+            return new LunaCard(userId, 9, data);
         else if(cardId == 8)
             return new Card(userId, 7, data);
         else if(cardId == 9)
@@ -42,12 +58,6 @@ export class CardFactory {
             return new Card(userId, 5, data);
         else if(cardId == 17)
             return new Card(userId, 6, data);
-        else if(cardId == 18)
-            return new Card(userId, 7, data);
-        else if(cardId == 19)
-            return new Card(userId, 8, data);
-        else if(cardId == 20)
-            return new Card(userId, 9, data);
 
         return new Card(userId, 5, data);
     }

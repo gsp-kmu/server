@@ -35,7 +35,7 @@ export class GameUser{
         return this.holder[1];
     }
 
-    RmoveCardOne(){
+    RemoveCardOne(){
         this.holder[0].RemoveCard(this.holder[0].length()-1);
     }
 

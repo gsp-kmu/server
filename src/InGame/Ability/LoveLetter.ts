@@ -3,7 +3,7 @@ import { RoomClient } from "../RoomClient";
 import { Ability } from "./Ability";
 import { Digit } from "../../common/Digit";
 
-export class LetterOfCurse extends Ability {
+export class LoveLetter extends Ability {
     targetIndex: number;
     targetDigit: number;
     cardId: number;

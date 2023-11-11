@@ -22,6 +22,27 @@ export class Holder{
         this.number.slice(index,1);
     }
 
+    GetCardId():number{
+        if(this.cards.length == 0)
+            return 0;
+        
+        return this.cards[this.number.length-1];
+    }
+
+    GetLast(){
+        if(this.number.length == 0)
+            return undefined;
+        
+        return this.Get(this.number.length -1);
+    }
+
+    Get(i:number){
+        return {
+            number:this.number[i],
+            card: this.cards[i]
+        }
+    }
+
     GetNumber():number{
         if(this.number.length == 0)
             return 0;

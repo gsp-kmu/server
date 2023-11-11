@@ -21,7 +21,7 @@ export class Sol extends Ability{
     Use(roomClient: RoomClient) {
         const user:GameUser = roomClient.GetUser(this.targetIndex);
         if(this.targetDigit == Digit.one){
-            user.RmoveCardOne();
+            user.RemoveCardOne();
         }
         else if(this.targetDigit == Digit.ten){
             user.RemoveCardTen();
