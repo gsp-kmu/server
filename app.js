@@ -125,7 +125,7 @@ app.post("/getdeck", async(req, res)=> {
 });
 
 // 전체 카드 리스트 얻기
-app.post("/getcard", async(req, res)=> {
+app.get("/getcard", async(req, res)=> {
     try{
         const GetAllCard = require('./src/deck/GetAllCard.ts');
         const {userId} = req.body;
