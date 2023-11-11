@@ -1,13 +1,15 @@
-import { Sol } from "../Ability/Sol";
+import { LoveLetter } from "../Ability/LoveLetter";
 import { Ability } from "../Ability/Ability";
 import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
+import { Empty } from "../Ability/Empty";
 
-export class SolCard extends Card {
-    ability: Ability
+export class ElfCard extends Card {
+    ability: Ability;
     constructor(id: number, number:number, data:any) {
         super(id, number, data);
-        this.ability = new Sol(this.id, data.targetId, data.targetDigit);
+        this.number = number;
+        this.ability = new Empty(this.id);
     }
 
     Use(roomClient:RoomClient){

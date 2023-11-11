@@ -19,5 +19,6 @@ module.exports = class Card extends Sequelize.Model {
 
     static associate(db) {
         db.Card.belongsToMany(db.Deck, {through: 'DeckCard'});
+        db.Card.belongsToMany(db.User, {through: 'UserCard'});
     }
 }

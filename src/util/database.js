@@ -67,16 +67,6 @@ async function CreateCard(){
     CreateCardF('점술사');
     CreateCardF('테라');
     CreateCardF('대천사');
-    CreateCardF('사신');
-    CreateCardF('해커');
-    CreateCardF('아이코');
-    CreateCardF('삐에로');
-    CreateCardF('네크로멘서');
-    CreateCardF('시스터');
-    CreateCardF('타락천사');
-    CreateCardF('메두사');
-    CreateCardF('엘프');
-    CreateCardF('루나');
 }
 async function GetDeck(deckId){
     const deck = await Deck.findOne({
@@ -86,13 +76,19 @@ async function GetDeck(deckId){
     return deck;
 }
 async function GetDeckCards(deckId){
-    const deck = await Deck.findByPk(deckId,{
-        include:Card,
-    });
-    const cards = deck.Cards;
-    return cards.map((card)=>{
-        return card.id;
-    });
+    // const deck = await Deck.findByPk(deckId,{
+    //     include:Card,
+    // });
+    // const cards = deck.Cards;
+    // return cards.map((card)=>{
+    //     return card.id;
+    // });
+    const cards = [];
+    for(let i=1;i<=10;i++){
+        cards.push(i);
+    }
+
+    return cards;
 }
 
 async function GetSocketIdToUser(socketId){

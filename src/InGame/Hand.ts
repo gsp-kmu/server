@@ -9,6 +9,8 @@ export class Hand {
     }
     
     TakeOutCard(index:number):any{
-        return this.cards.splice(index);
+        const cardId = this.cards[index];
+        this.cards.splice(index);
+        return cardId;
     }
 }

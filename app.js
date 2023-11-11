@@ -24,8 +24,17 @@ app.set('port', 8000);
 
 app.use(bodyParser.json());
 
-app.use('/random', (req, res) => {
-    res.send(randomService.Start());
+app.get('/random', async (req, res) => {
+    try{
+        const {userId} = req.body;
+
+        const value = await randomService.Start(userId);
+        res.status(200).json({msg : 'Successfully Random', cardList : value});
+    }
+    catch (err){
+        console.log(err);
+        res.status(400).json({msg : "Unexpected Error"});
+    }
 });
 
 // 회원가입
@@ -47,8 +56,9 @@ app.post("/register", async (req, res) => {
             res.status(400).send('duplicate username : ' + id);
         }
     }
-    catch{
-        res.status(401).send('Format Error');
+    catch (err){
+        console.log(err);
+        res.status(401).send('Unexpected Error');
     }
 })
 
@@ -93,7 +103,7 @@ app.post("/savedeck", async(req, res)=> {
     }
     catch(err){
         console.log(err);
-        res.status(402).send("Format Error");
+        res.status(402).send("Unexpected Error");
     }
 });
 
@@ -107,10 +117,28 @@ app.post("/getdeck", async(req, res)=> {
         const module = new GetDeck(userId);
         const decklist = await module.getDeckList();
 
-        res.status(200).json({msg:"All decks are updated",deckList:decklist});
+        res.status(200).json({msg:"Successfully get deck list",deckList:decklist});
     }
     catch{
-        res.status(400).json({msg:"Format Error"});
+        res.status(400).json({msg:"Unexpected Error"});
+    }    
+});
+
+// 전체 카드 리스트 얻기
+app.post("/getcard", async(req, res)=> {
+    try{
+        const GetAllCard = require('./src/deck/GetAllCard.ts');
+        const {userId} = req.body;
+
+        console.log(userId + "번 유저가 전체 카드 목록을 얻을려고 시도합니다.");
+        const module = new GetAllCard(userId);
+        const cardlist = await module.getCardList();
+
+        res.status(200).json({msg:"Successfully get card list",cardList:cardlist});
+    }
+    catch (err){
+        console.log(err);
+        res.status(400).json({msg:"Unexpected Error"});
     }    
 });
 

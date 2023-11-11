@@ -1,13 +1,14 @@
-import { Sol } from "../Ability/Sol";
+import { Reaper } from "../Ability/Reaper";
 import { Ability } from "../Ability/Ability";
 import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
 
-export class SolCard extends Card {
+export class ReaperCard extends Card {
     ability: Ability
-    constructor(id: number, number:number, data:any) {
+    constructor(id: number, number:number, data:any, cardId:number) {
         super(id, number, data);
-        this.ability = new Sol(this.id, data.targetId, data.targetDigit);
+        this.number = number;
+        this.ability = new Reaper(this.id, data.drawDigit, data.targetId, data.targetDigit);
     }
 
     Use(roomClient:RoomClient){
