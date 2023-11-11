@@ -40,6 +40,8 @@ class RandomService{
                 }
             })
 
+            console.log(count);
+
             await UserCard.update({
                 count : count.count+1
             },
