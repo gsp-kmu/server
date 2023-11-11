@@ -94,7 +94,7 @@ module.exports = (server) => {
 
     process.stdin.on('data', (data) => {
         const input = data.toString().trim();
-        if (input == 'all kick') {
+        if (input == 'allkick') {
             io.sockets.emit('test-message', "you kick bye bye")
             io.sockets.disconnect();
         }
