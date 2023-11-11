@@ -24,7 +24,7 @@ app.set('port', 8000);
 
 app.use(bodyParser.json());
 
-app.get('/random', async (req, res) => {
+app.post('/random', async (req, res) => {
     try{
         const {userId} = req.body;
 
