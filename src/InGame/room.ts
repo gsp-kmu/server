@@ -81,6 +81,7 @@ class GameRoom implements RoomClient {
                     let sendData = {
                         'id':data.id,
                         'cardId':cardId,
+                        'drawDigit':data.drawDigit,
                         'targetId':data.targetId,
                         'targetDigit':data.targetDigit,
                         'targetCardIndex':data.targetCardIndex,
@@ -162,6 +163,7 @@ class GameRoom implements RoomClient {
                 setTimeout(()=>{
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
+                    Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
                 }, 2000);
                 turn = '1';
             }

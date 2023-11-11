@@ -12,7 +12,6 @@ export class BlackAicoCard extends Card {
     }
 
     Use(roomClient:RoomClient){
-        super.Use(roomClient);
         this.ability.Play(roomClient);
     }
 }
