@@ -15,6 +15,11 @@ class RandomService{
         console.log(userId + '님이 카드 뽑기를 시작합니다...');
 
         let randomlist = []
+        const user = await User.findOne({
+            where:{
+                id : userId
+            }
+        })
 
         for(let i = 0; i<4; i++){
             let tmp = this.Random();
@@ -25,12 +30,6 @@ class RandomService{
                     id : tmp
                 }
             });
-
-            const user = await User.findOne({
-                where:{
-                    id : userId
-                }
-            })
 
             await user.addCard(card);
 
