@@ -60,10 +60,17 @@ class GameRoom implements RoomClient {
             const io = GetIO();
             const room = io.of('/room' + this.id);
 
+            socket.on("cheat_ingame_draw_card", (data:any) => {
+                this.users[i].hand.AddCard(data.id);
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(data.id));
+                Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
+            });
+
             socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END, () => {
                 // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
                 if (i == this.turn.GetTurn() && this.turn.isCurrentTurnProgress == true) {
                     this.turn.NextTurn();
+                    console.log(this.users[i].socketId, "해당 유저가 턴을 끝냈다고 메시지 보냄.");
                     this.SendTurn();
                 }
             });
