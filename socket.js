@@ -20,6 +20,7 @@ module.exports = (server) => {
     room.on("hi", ()=>{
         console.log("room room");
     });
+
     io.on('connection', (socket)=>{
         const req = socket.request;
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -91,16 +92,11 @@ module.exports = (server) => {
         }
     })
 
-    process.stdin.on('data', (data)=>{
+    process.stdin.on('data', (data) => {
         const input = data.toString().trim();
-        if(input == 'w'){
-            const card = {
-                id:"test id",
-                name:"러브러브러브",
-                url: "./Love.png",
-            }
-            io.sockets.emit('test-card', card);
-            console.log('테스트 카드 클라한테 보냄');
+        if (input == 'all kick') {
+            io.sockets.emit('test-message', "you kick bye bye")
+            io.sockets.disconnect();
         }
     })
 
