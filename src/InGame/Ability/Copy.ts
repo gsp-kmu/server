@@ -21,18 +21,21 @@ export class Copy extends Ability{
     Use(roomClient: RoomClient) {
         const user:GameUser = roomClient.GetUser(this.myId);
         const myDigit = this.data.drawDigit;
-        let cardId;
-        let cardData = this.data;
+        let cardId = undefined;
+        let cardData = JSON.parse(JSON.stringify(this.data));
         if(myDigit == Digit.one){
-            cardId = user.getOne().GetCardId();
+            cardId = user.getTen().GetCardId();
             cardData.drawDigit = Digit.ten;
         }
         else if(myDigit == Digit.ten){
-            cardId = user.getTen().GetCardId();
+            cardId = user.getOne().GetCardId();
             cardData.drawDigit = Digit.one;
         }
 
+        if(cardId == undefined)
+            return;
+
         const card:Card = CardFactory.GetCard(this.myId, cardId, cardData);
-        card.Use(roomClient);
+        card.ability.Play(roomClient);
     }
 };

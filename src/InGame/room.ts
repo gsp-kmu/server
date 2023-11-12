@@ -7,8 +7,9 @@ import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 import { CardFactory } from "./Card/CardFactory";
-import { eventNames } from "process";
+import { eventNames, send } from "process";
 import Turn from "./turn";
+import { Digit } from "../common/Digit";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
@@ -93,7 +94,10 @@ class GameRoom implements RoomClient {
                         'targetDigit':data.targetDigit,
                         'targetCardIndex':data.targetCardIndex,
                     };
-                    console.log('sendData:  ', sendData);
+                    let testData = JSON.parse(JSON.stringify(sendData));;
+                    testData.drawDigit = Digit[testData.drawDigit];
+                    testData.targetDigit = Digit[testData.targetDigit];
+                    console.log('sendData:  ', testData);
                     this.PlayCard(i, data);
                     this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_RECV, sendData);
                     const a = this.users[0].holder[1].GetNumber() * 10 + this.users[0].holder[0].GetNumber();
@@ -101,6 +105,7 @@ class GameRoom implements RoomClient {
 
                     console.log("room" + this.id, ": user1 number: ", a);
                     console.log("room" + this.id, ": user2 number: ", b);
+                    console.log("userHand값은2:  ", this.users[i].hand.cards);
                 }
             });
 

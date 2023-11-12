@@ -4,7 +4,6 @@ import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
 
 export class BlackAicoCard extends Card {
-    ability: Ability
     constructor(id: number, number:number, data:any, cardId:number) {
         super(id, number, data);
         this.number = number;

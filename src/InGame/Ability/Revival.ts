@@ -26,6 +26,8 @@ export class Revival extends Ability{
         if(this.myDigit == Digit.one){
             cardId = user.getOne().cards[this.myCardIndex];
             number = user.getOne().number[this.myCardIndex];
+            if(cardId == undefined)
+                return;
             user.getOne().cards.slice(this.myCardIndex, 1);
             user.getOne().number.slice(this.myCardIndex,1);
             user.getTen().AddCard(cardId, number);
@@ -33,6 +35,8 @@ export class Revival extends Ability{
         else if(this.myDigit = Digit.ten){
             cardId = user.getTen().cards[this.myCardIndex];
             number = user.getTen().number[this.myCardIndex];
+            if (cardId == undefined)
+                return;
             user.getTen().cards.slice(this.myCardIndex, 1);
             user.getTen().number.slice(this.myCardIndex,1);
             user.getOne().AddCard(cardId, number);
