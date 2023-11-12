@@ -3,7 +3,6 @@ import { Ability } from "../Ability/Ability";
 import { Card } from "./Card";
 
 export class TransformCard extends Card {
-    ability: Ability
     constructor(id: number, number:number, data:any) {
         super(id, number, data);
         this.number = 0;

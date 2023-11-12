@@ -5,7 +5,6 @@ import { Empty } from "../Ability/Empty";
 import { Digit } from "../../common/Digit";
 
 export class LunaCard extends Card {
-    ability: Ability;
     constructor(id: number, number:number, data:any) {
         const new_data = data;
         new_data.drawDigit = Digit.one;

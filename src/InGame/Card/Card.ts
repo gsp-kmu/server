@@ -1,11 +1,13 @@
 import { Json } from "sequelize/types/utils";
 import { GameUser } from "../GameUser";
 import { RoomClient } from "../RoomClient";
+import { Ability } from "../Ability/Ability";
 
 export class Card {
     id: number;
     data: any
     number: number;
+    ability: Ability;
 
     constructor(id: number, number: number, data: any) {
         this.id = id;

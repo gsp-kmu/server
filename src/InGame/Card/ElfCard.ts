@@ -5,7 +5,6 @@ import { RoomClient } from "../RoomClient";
 import { Empty } from "../Ability/Empty";
 
 export class ElfCard extends Card {
-    ability: Ability;
     constructor(id: number, number:number, data:any) {
         super(id, number, data);
         this.number = number;

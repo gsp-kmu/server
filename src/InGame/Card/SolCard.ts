@@ -4,7 +4,6 @@ import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
 
 export class SolCard extends Card {
-    ability: Ability
     constructor(id: number, number:number, data:any) {
         super(id, number, data);
         this.ability = new Sol(this.id, data.targetId, data.targetDigit);
