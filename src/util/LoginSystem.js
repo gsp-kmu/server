@@ -70,38 +70,42 @@ class LoginSystem{
         const id = await cryptoModule.cipher(this._id);
         let bool = false;
         const comparePW = await new Promise(async (resolve, reject) =>{
-        const salt = await Account.findOne({
-            attributes: ['salt'],
-            raw: true,
-            where:{
-                id,
-            },
-        },);
+            const salt = await Account.findOne({
+                attributes: ['salt'],
+                raw: true,
+                where:{
+                    id,
+                },
+            },);
 
-        crypto.pbkdf2(this._password, salt.salt, 104906, 64, 'sha512', (err, key) => {
-            if(err) rejects(err);
-            else resolve({hashed : key.toString('base64'), salt});
+            if(salt != null){
+                crypto.pbkdf2(this._password, salt.salt, 104906, 64, 'sha512', (err, key) => {
+                    if(err) reject(err);
+                    else resolve({hashed : key.toString('base64'), salt});
+                });    
+            }
+            else{
+                reject('Nan');
+            }
+            },)
+            .then(async (result) => {
+            const realPW = await Account.findOne({
+                attributes: ['password', 'UserId'],
+                raw: true,
+                where:{
+                    id,
+                },
+            },);
+            if(realPW.password == result.hashed){
+                console.log("로그인 성공!");
+                bool = realPW.UserId;
+            }
+            else{
+                console.log("로그인 실패!");
+                bool = -1;
+            }
         });
-        },)
-        .then(async (result) => {
-        console.log(result.hashed);
-        const realPW = await Account.findOne({
-            attributes: ['password'],
-            raw: true,
-            where:{
-                id,
-            },
-        },);
-        if(realPW.password == result.hashed){
-            console.log("로그인 성공!");
-            bool = true;
-        }
-        else{
-            console.log("로그인 실패!");
-            bool = false;
-        }
-    });
-    return bool;    
+        return bool; 
     }
 }
 

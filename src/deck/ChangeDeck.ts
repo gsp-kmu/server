@@ -27,7 +27,7 @@ class ChangeDeck{
                 //각 덱의 구성을 받아서 카드를 맵핑시켜줌.
                 const decks:any = await this.Deck.findOne({
                     where:{
-                        name:i,
+                        id:(this.userId - 1)*5 + i,
                         userId:this.userId
                     }
                 });
@@ -46,9 +46,9 @@ class ChangeDeck{
                   },new Map());
                 
                 for (let [key, value] of result.entries()) {
-                    const query:any = 'UPDATE deckcard SET count = ? WHERE DeckId IN (SELECT id FROM decks WHERE UserId = ? AND name = ?) AND CardId = ?';
+                    const query:any = 'UPDATE deckcard SET count = ? WHERE DeckId IN (SELECT id FROM decks WHERE UserId = ? AND id = ?) AND CardId = ?';
                     await sequelize.query(query,{
-                        replacements: [value, this.userId, i.toString(), key]
+                        replacements: [value, this.userId, (this.userId-1)*5 + i, key]
                     });
                 }
             }
