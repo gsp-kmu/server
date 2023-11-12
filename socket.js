@@ -41,6 +41,7 @@ module.exports = (server) => {
                 console.log("AddUserId");
                 AddUserId(socket.id, user.UserId);
             }
+            socket.emit("login_success", "");
         });
 
         socket.on(Info.EVENT_MESSAGE.MATCH_START, async ()=>{
@@ -107,6 +108,11 @@ module.exports = (server) => {
             sequelize.query(query).then((result) => {
                 console.log('쿼리 실행 결과:', result);
             });
+        } 
+        else if (input.startsWith('notice ')) {
+            // 'db'로 시작하는 명령어인 경우
+            const data = input.substring(6); // 'db '를 제외한 나머지 문자열을 추출
+            io.emit("notice", data);
         }
     });
     

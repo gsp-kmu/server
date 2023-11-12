@@ -25,6 +25,7 @@ module.exports =  class Info {
         INGAME_PLAY_CARD: 'ingame_play_card',
         INGAME_PLAY_SEND: 'ingame_play_send',
         INGAME_PLAY_RECV: 'ingame_play_recv',
+        INGAME_SURRENDER: 'ingame_surrender',
         TEST:'test',
     })
 }
