@@ -40,9 +40,6 @@ class RandomService{
                 }
             })
             
-            console.log(tmp + "를 뽑아서 시도해보는 중입니다 : " + count.count  + "개에요!!");
-            console.log(count);
-
             await UserCard.update({
                 count : count.count+1
             },

@@ -91,10 +91,10 @@ app.post("/login", async (req, res) => {
 app.post("/savedeck", async(req, res)=> {
     try{
         const ChangeDeck = require('./src/deck/ChangeDeck.ts');
-        const {userId, deckList} = req.body;
+        const {userId, deckList, name} = req.body;
 
         console.log(userId + "번 유저가 덱 저장을 시도하려 합니다.");
-        const module = new ChangeDeck(userId, deckList);
+        const module = new ChangeDeck(userId, deckList, name);
         const execute = await module.saveDeck();
 
         if(execute == 0) res.status(400).send("All decks are not updated");
@@ -115,9 +115,9 @@ app.post("/getdeck", async(req, res)=> {
 
         console.log(userId + "번 유저가 덱 목록을 얻을려고 시도합니다.");
         const module = new GetDeck(userId);
-        const decklist = await module.getDeckList();
+        const [decklist, namelist] = await module.getDeckList();
 
-        res.status(200).json({msg:"Successfully get deck list",deckList:decklist});
+        res.status(200).json({msg:"Successfully get deck list",deckList:decklist, nameList:namelist});
     }
     catch{
         res.status(400).json({msg:"Unexpected Error"});
