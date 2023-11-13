@@ -59,6 +59,6 @@ export class CardFactory {
         else if(cardId == 17)
             return new Card(userId, 6, data);
 
-        return new Card(userId, 5, data);
+        return new ElfCard(userId, 5, data);
     }
 }
