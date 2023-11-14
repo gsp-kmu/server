@@ -22,7 +22,7 @@ export class ParadiseLost extends Ability {
             const ten = users[i].getTen().GetLast();
 
             if(one == undefined || ten == undefined)
-                continue;
+                break;
 
             users[i].RemoveCardOne();
             users[i].RemoveCardTen();

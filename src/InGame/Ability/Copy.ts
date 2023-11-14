@@ -19,15 +19,17 @@ export class Copy extends Ability{
     }
 
     Use(roomClient: RoomClient) {
-        const user:GameUser = roomClient.GetUser(this.myId);
+        const user:GameUser = roomClient.GetUser(this.data);
         const myDigit = this.data.drawDigit;
         let cardId = undefined;
         let cardData = JSON.parse(JSON.stringify(this.data));
         if(myDigit == Digit.one){
+            console.log(user.getTen());
             cardId = user.getTen().GetCardId();
             cardData.drawDigit = Digit.ten;
         }
-        else if(myDigit == Digit.ten){
+        else if (myDigit == Digit.ten) {
+            console.log(user.getOne());
             cardId = user.getOne().GetCardId();
             cardData.drawDigit = Digit.one;
         }

@@ -4,9 +4,9 @@ import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
 
 export class SolCard extends Card {
-    constructor(id: number, number:number, data:any) {
-        super(id, number, data);
-        this.ability = new Sol(this.id, data.targetId, data.targetDigit);
+    constructor(id: number, number: number, data: any, cardId:number) {
+        super(id, number, data, cardId);
+        this.ability = new Sol(data.id, data.targetId, data.targetDigit);
     }
 
     Use(roomClient:RoomClient){
