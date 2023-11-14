@@ -33,11 +33,11 @@ class MatchController{
         });
       }
       async MatchUsers(user1, user2){
-        Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
-        Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
         const room = await roomService.CreateRoom(user1, user2);
         console.log("매칭 성공");
         roomService.AddRoom(room);
+        Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
+        Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_END, "");
       }
 
     async GetUserTwoRandom(count, users) {

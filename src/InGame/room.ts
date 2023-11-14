@@ -19,6 +19,7 @@ class GameRoom implements RoomClient {
     turn: Turn;
     socket1: any;
     socket2: any;
+    readyCount:number;
 
     // user1 GameUser
     constructor(user1: any, user2: any, id: any) {
@@ -27,6 +28,7 @@ class GameRoom implements RoomClient {
         this.endAbility = [];
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
+        this.readyCount = 0;
 
         GetDeckCards(1).then(async (cards: Array<number>) => {
             console.log("cards: ", cards);
@@ -37,16 +39,7 @@ class GameRoom implements RoomClient {
             const gameUser2 = new GameUser(user2, cards2);
             this.users.push(gameUser2);
 
-            for (let j = 0; j < this.users.length; j++) {
-                Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
-            }
-            this.socket1 = GetSocket(user1);
-            this.socket2 = GetSocket(user2);
-
-            this.SendInitMessage();
-            this.RegisterEvent();
-
-            this.CheckRoomClose = this.RealCheckRoomClose;
+            this.RegisterEvents();
         });
     }
 
@@ -55,11 +48,25 @@ class GameRoom implements RoomClient {
         this.SendTurn();
     }
 
-    RegisterEvent() {
+    RegisterEvents() {
         for (let i = 0; i < Info.MAX_PLAYER; i++) {
             const socket = GetSocket(this.users[i].socketId);
             const io = GetIO();
             const room = io.of('/room' + this.id);
+            
+            socket.on(Info.EVENT_MESSAGE.INGAME_CLIENT_READY, async ()=>{
+                this.readyCount += 1;
+                if(this.readyCount >= Info.MAX_PLAYER){
+                    for (let j = 0; j < this.users.length; j++) {
+                        Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
+                    }
+                    this.socket1 = GetSocket(this.users[0].socketId);
+                    this.socket2 = GetSocket(this.users[1].socketId);
+        
+                    this.SendInitMessage();
+                    this.CheckRoomClose = this.RealCheckRoomClose;
+                }
+            });
 
             socket.on("cheat_ingame_draw_card", (data:any) => {
                 this.users[i].hand.AddCard(data.id);
