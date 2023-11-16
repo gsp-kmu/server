@@ -19,7 +19,7 @@ export class Copy extends Ability{
     }
 
     Use(roomClient: RoomClient) {
-        const user:GameUser = roomClient.GetUser(this.data);
+        const user:GameUser = roomClient.GetUser(this.myId);
         const myDigit = this.data.drawDigit;
         let cardId = undefined;
         let cardData = JSON.parse(JSON.stringify(this.data));
