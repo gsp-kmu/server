@@ -118,6 +118,8 @@ class GameRoom implements RoomClient {
 
             socket.on(Info.EVENT_MESSAGE.INGAME_SURRENDER, (data)=>{
                 this.GameEndLose(this.users[i].socketId);
+                this.turn.currentTurnCount = Info.MAX_TURN * 2;
+                this.isActive = false;
             })
         }
     }
