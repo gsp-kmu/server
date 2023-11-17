@@ -42,7 +42,7 @@ class GetDeck{
                     }
                 }
                 else{
-                    tmp.push(0);
+                    //tmp.push(null);
                 }
 
                 deckList.push(tmp);
