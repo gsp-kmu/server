@@ -110,8 +110,7 @@ module.exports = (server) => {
             });
         } 
         else if (input.startsWith('notice ')) {
-            // 'db'로 시작하는 명령어인 경우
-            const data = input.substring(6); // 'db '를 제외한 나머지 문자열을 추출
+            const data = input.substring(6); 
             io.emit("notice", data);
         }
     });
