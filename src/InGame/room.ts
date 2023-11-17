@@ -149,11 +149,11 @@ class GameRoom implements RoomClient {
             SetUserState(this.users[i].socketId, Info.userState.Join);
             if (loseSocketId != this.users[i].socketId) {
                 AddUserWinLose(this.users[i].socketId, 1, 0);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
             }
         }
     }
@@ -163,11 +163,11 @@ class GameRoom implements RoomClient {
             SetUserState(this.users[i].socketId, Info.userState.Join);
             if (winSocketId == this.users[i].socketId) {
                 AddUserWinLose(winSocketId, 1, 0);
-                Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
+                Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
+                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
             }
         }
     }
