@@ -7,7 +7,7 @@ export class HackerCard extends Card {
     constructor(id: number, number: number, data: any, cardId:number) {
         super(id, number, data, cardId);
         this.number = number;
-        this.ability = new Copy(data.id, data);
+        this.ability = new Copy(data.id, data, number, cardId);
     }
 
     Use(roomClient:RoomClient){

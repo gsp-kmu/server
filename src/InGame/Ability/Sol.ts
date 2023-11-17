@@ -7,8 +7,8 @@ import { Digit } from "../../common/Digit";
 export class Sol extends Ability{
     targetIndex:number;
     targetDigit:number;
-    constructor(myId:number, targetIndex:number, targetDigit:number){
-        super(myId);
+    constructor(myId: number, targetIndex: number, targetDigit: number, number: number, cardId: number){
+        super(myId, number, cardId);
         this.targetIndex = targetIndex;
         this.targetDigit = targetDigit;
 

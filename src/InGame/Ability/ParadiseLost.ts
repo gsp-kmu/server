@@ -4,8 +4,8 @@ import { Ability } from "./Ability";
 import { Digit } from "../../common/Digit";
 
 export class ParadiseLost extends Ability {
-    constructor(myId: number) {
-        super(myId);
+    constructor(myId: number, number: number, cardId: number) {
+        super(myId, number, cardId);
     }
 
     Play(roomClient: RoomClient) {

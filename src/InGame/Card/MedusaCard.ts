@@ -7,7 +7,7 @@ export class MedusaCard extends Card {
     constructor(id: number, number: number, data: any, cardId:number) {
         super(id, number, data, cardId);
         this.number = number;
-        this.ability = new Rock(data.id);
+        this.ability = new Rock(data.id, number, cardId);
     }
 
     Use(roomClient:RoomClient){

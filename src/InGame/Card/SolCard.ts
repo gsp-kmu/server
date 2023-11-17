@@ -6,7 +6,7 @@ import { RoomClient } from "../RoomClient";
 export class SolCard extends Card {
     constructor(id: number, number: number, data: any, cardId:number) {
         super(id, number, data, cardId);
-        this.ability = new Sol(data.id, data.targetId, data.targetDigit);
+        this.ability = new Sol(data.id, data.targetId, data.targetDigit, number, cardId);
     }
 
     Use(roomClient:RoomClient){

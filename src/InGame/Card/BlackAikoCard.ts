@@ -10,7 +10,8 @@ export class BlackAicoCard extends Card {
         this.ability = new LetterOfCurse(data.id, data.targetId, data.drawDigit, cardId, number);
     }
 
-    Use(roomClient:RoomClient){
+    Use(roomClient: RoomClient) {
+        super.Use(roomClient);
         this.ability.Play(roomClient);
     }
 }

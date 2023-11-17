@@ -7,13 +7,11 @@ export class LoveLetter extends Ability {
     targetIndex: number;
     drawDigit: number;
     cardId: number;
-    number: number;
     constructor(myId: number, targetIndex: number, drawDigit: number, cardId: number, number: number) {
-        super(myId);
+        super(myId, number, cardId);
         this.targetIndex = targetIndex;
         this.drawDigit = drawDigit;
         this.cardId = cardId;
-        this.number = number;
     }
 
     Play(roomClient: RoomClient) {
@@ -21,11 +19,14 @@ export class LoveLetter extends Ability {
     }
 
     Use(roomClient: RoomClient) {
+        const myUser: GameUser = roomClient.GetUser(this.myId);
         const user: GameUser = roomClient.GetUser(this.targetIndex);
         if (this.drawDigit == Digit.one) {
+            myUser.RemoveCardOne();
             user.AddCardOne(this.cardId, this.number);
         }
         else if (this.drawDigit == Digit.ten) {
+            myUser.RemoveCardTen();
             user.AddCardOne(this.cardId, this.number);
         }
     }

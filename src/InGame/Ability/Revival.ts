@@ -9,8 +9,8 @@ import { Card } from "../Card/Card";
 export class Revival extends Ability{
     myDigit:number;
     myCardIndex:number;
-    constructor(myId:number, myDigit:number, myCardIndex:number){
-        super(myId);
+    constructor(myId: number, myDigit: number, myCardIndex: number, number: number, cardId: number){
+        super(myId, number, cardId);
         this.myDigit = myDigit;
         this.myCardIndex = myCardIndex;
     }
@@ -28,18 +28,28 @@ export class Revival extends Ability{
             number = user.getOne().number[this.myCardIndex];
             if(cardId == undefined)
                 return;
-            user.getOne().cards.slice(this.myCardIndex, 1);
-            user.getOne().number.slice(this.myCardIndex,1);
-            user.getTen().AddCard(cardId, number);
+
+            console.log('----------------------------');
+            console.log('this.myCardIndex: ', this.myCardIndex);
+            console.log('number: ', number);
+            console.log('----------------------------');
+            user.getOne().cards.splice(this.myCardIndex, 1);
+            user.getOne().number.splice(this.myCardIndex,1);
+            user.AddCardTen(cardId, number)
         }
         else if(this.myDigit = Digit.ten){
             cardId = user.getTen().cards[this.myCardIndex];
             number = user.getTen().number[this.myCardIndex];
             if (cardId == undefined)
                 return;
-            user.getTen().cards.slice(this.myCardIndex, 1);
-            user.getTen().number.slice(this.myCardIndex,1);
-            user.getOne().AddCard(cardId, number);
+
+            console.log('----------------------------');
+            console.log('this.myCardIndex: ', this.myCardIndex);
+            console.log('number: ', number);
+            console.log('----------------------------');
+            user.getTen().cards.splice(this.myCardIndex, 1);
+            user.getTen().number.splice(this.myCardIndex, 1);
+            user.AddCardOne(cardId, number)
         }
     }
 };

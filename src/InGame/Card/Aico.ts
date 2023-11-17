@@ -11,6 +11,7 @@ export class Aico extends Card {
     }
 
     Use(roomClient: RoomClient) {
+        super.Use(roomClient);
         this.ability.Play(roomClient);
     }
 }

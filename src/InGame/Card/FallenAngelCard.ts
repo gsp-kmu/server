@@ -7,7 +7,7 @@ export class FallenAngelCard extends Card {
     constructor(id: number, number: number, data: any, cardId:number) {
         super(id, number, data, cardId);
         this.number = number;data.id
-        this.ability = new ParadiseLost(data.id);
+        this.ability = new ParadiseLost(data.id, number, cardId);
     }
 
     Use(roomClient:RoomClient){

@@ -7,8 +7,8 @@ export class Reaper extends Ability {
     targetIndex: number;
     targetDigit: number;
     myDigit: number;
-    constructor(myId: number, myDigit: number, targetIndex: number, targetDigit: number) {
-        super(myId);
+    constructor(myId: number, myDigit: number, targetIndex: number, targetDigit: number, number:number, cardId:number) {
+        super(myId, number, cardId);
         this.myDigit = myDigit;
         this.targetIndex = targetIndex;
         this.targetDigit = targetDigit;
@@ -46,7 +46,8 @@ export class Reaper extends Ability {
         else if (this.myDigit == Digit.ten) {
             user.AddCardOne(targetCardId, targetCardNumber);
         }
-        console.log('---------------------------------------');
+        console.log('---------------------------------------'); 
+        console.log("this.myDigit: ", this.myDigit);
         console.log("targetCardId: ", targetCardId);
         console.log("targetCardNumber: ", targetCardNumber);
         console.log("this.targetDigit: ", this.targetDigit);

@@ -7,7 +7,7 @@ export class ReaperCard extends Card {
     constructor(id: number, number:number, data:any, cardId:number) {
         super(id, number, data, cardId);
         this.number = number;
-        this.ability = new Reaper(data.id, data.drawDigit, data.targetId, data.targetDigit);
+        this.ability = new Reaper(data.id, data.drawDigit, data.targetId, data.targetDigit, number, cardId);
     }
 
     Use(roomClient:RoomClient){
