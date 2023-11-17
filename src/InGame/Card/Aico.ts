@@ -7,7 +7,7 @@ export class Aico extends Card {
     constructor(id: number, number:number, data:any, cardId:number) {
         super(id, number, data, cardId);
         this.number = number;
-        this.ability = new LoveLetter(data.id, data.targetId, data.targetDigit, cardId, number);
+        this.ability = new LoveLetter(data.id, data.targetId, data.drawDigit, cardId, number);
     }
 
     Use(roomClient: RoomClient) {

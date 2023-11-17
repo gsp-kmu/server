@@ -5,13 +5,13 @@ import { Digit } from "../../common/Digit";
 
 export class LoveLetter extends Ability {
     targetIndex: number;
-    targetDigit: number;
+    drawDigit: number;
     cardId: number;
     number: number;
-    constructor(myId: number, targetIndex: number, targetDigit: number, cardId: number, number: number) {
+    constructor(myId: number, targetIndex: number, drawDigit: number, cardId: number, number: number) {
         super(myId);
         this.targetIndex = targetIndex;
-        this.targetDigit = targetDigit;
+        this.drawDigit = drawDigit;
         this.cardId = cardId;
         this.number = number;
     }
@@ -22,10 +22,10 @@ export class LoveLetter extends Ability {
 
     Use(roomClient: RoomClient) {
         const user: GameUser = roomClient.GetUser(this.targetIndex);
-        if (this.targetDigit == Digit.one) {
+        if (this.drawDigit == Digit.one) {
             user.AddCardOne(this.cardId, this.number);
         }
-        else if (this.targetDigit == Digit.ten) {
+        else if (this.drawDigit == Digit.ten) {
             user.AddCardOne(this.cardId, this.number);
         }
     }
