@@ -91,10 +91,10 @@ app.post("/login", async (req, res) => {
 app.post("/savedeck", async(req, res)=> {
     try{
         const ChangeDeck = require('./src/deck/ChangeDeck.ts');
-        const {userId, deckList, name} = req.body;
+        const {userId, deckList, nameList} = req.body;
 
         console.log(userId + "번 유저가 덱 저장을 시도하려 합니다.");
-        const module = new ChangeDeck(userId, deckList, name);
+        const module = new ChangeDeck(userId, deckList, nameList);
         const execute = await module.saveDeck();
 
         if(execute == 0) res.status(400).send("All decks are not updated");
