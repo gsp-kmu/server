@@ -98,6 +98,12 @@ async function GetDeckCards(deckId){
     for(let i=1;i<=10;i++){
         cards.push(i);
     }
+    for (let i = 1; i <= 10; i++) {
+        cards.push(i);
+    }
+    for (let i = 1; i <= 10; i++) {
+        cards.push(i);
+    }
 
     return cards;
 }
