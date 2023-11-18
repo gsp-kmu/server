@@ -28,7 +28,7 @@ export class LetterOfCurse extends Ability {
         }
         else if (this.drawDigit == Digit.ten) {
             myUser.RemoveCardTen();
-            user.AddCardOne(this.cardId, this.number);
+            user.AddCardTen(this.cardId, this.number);
         }
     }
 };
