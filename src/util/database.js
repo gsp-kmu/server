@@ -113,6 +113,8 @@ async function GetDeckCards(deckId){
     });
 
     deckCards.map((deckCard)=>{
+        const count = deckCard.count;
+        const CardId = deckCard.CardId;
         for(let i=0;i<count;i++){
             cards.push(CardId);
         }
