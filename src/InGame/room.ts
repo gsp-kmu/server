@@ -67,7 +67,7 @@ class GameRoom implements RoomClient {
                     this.CheckRoomClose = this.RealCheckRoomClose;
                 }
             });
-
+           
             socket.on("cheat_ingame_draw_card", (data:any) => {
                 this.users[i].hand.AddCard(data.id);
                 Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(data.id));
@@ -77,12 +77,15 @@ class GameRoom implements RoomClient {
             socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END, () => {
                 // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
                 if (i == this.turn.GetTurn() && this.turn.isCurrentTurnProgress == true) {
+                    if (this.turn.CheckTurnEnd() == true)
+                        return;
+
                     this.turn.NextTurn();
                     console.log(this.users[i].socketId, "해당 유저가 턴을 끝냈다고 메시지 보냄.");
                     this.SendTurn();
                 }
             });
-
+            
             socket.on(Info.EVENT_MESSAGE.TEST, (data: any) => {
                 console.log(i, "  test:  ", data);
             });
@@ -115,7 +118,7 @@ class GameRoom implements RoomClient {
                     console.log("userHand값은2:  ", this.users[i].hand.cards);
                 }
             });
-
+            
             socket.on(Info.EVENT_MESSAGE.INGAME_SURRENDER, (data)=>{
                 this.GameEndLose(this.users[i].socketId);
                 this.turn.currentTurnCount = Info.MAX_TURN * 2;

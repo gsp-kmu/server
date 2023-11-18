@@ -29,10 +29,13 @@ module.exports = class GameController {
                         continue;
                     
                     socket.leave("room" + this.rooms[i].id);
-
+                    
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_CLIENT_READY);
+                    socket.removeAllListeners("cheat_ingame_draw_card");
                     socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_TURN_END);
                     socket.removeAllListeners(Info.EVENT_MESSAGE.TEST);
-                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_PLAY_CARD);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_PLAY_SEND);
+                    socket.removeAllListeners(Info.EVENT_MESSAGE.INGAME_SURRENDER);
                 }
                 const io = GetIO();
                 io.sockets.adapter.del("room" + this.rooms[i].id);
