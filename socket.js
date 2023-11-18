@@ -41,10 +41,26 @@ module.exports = (server) => {
                 console.log("AddUserId");
                 AddUserId(socket.id, user.UserId);
             }
+            socket.emit("initid", user.UserId);
             socket.emit("login_success", "");
         });
 
-        socket.on(Info.EVENT_MESSAGE.MATCH_START, async ()=>{
+        socket.on(Info.EVENT_MESSAGE.MATCH_START, async () => {
+            const userState = await UserState.findOne({
+                where: {
+                    'socketId': socket.id,
+                    'state': Info.userState.Join,
+                }
+            });
+
+            if (userState != null) {
+                console.log(socket.id, " 매칭 시작함");
+                userState.state = Info.userState.Match;
+                await userState.save();
+            }
+        });
+
+        socket.on(Info.EVENT_MESSAGE.MATCH_START, async(deckIndex)=>{
             const userState = await UserState.findOne({
                 where:{
                     'socketId':socket.id,
@@ -53,6 +69,7 @@ module.exports = (server) => {
             });
 
             if(userState != null){
+                socket.deckIndex = deckIndex;
                 console.log(socket.id, " 매칭 시작함");
                 userState.state = Info.userState.Match;
                 await userState.save();

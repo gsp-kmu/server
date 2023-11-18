@@ -3,6 +3,7 @@ const UserState = require('../../models/userstate');
 const Info = require('../common/Info');
 const Room = require('../../models/room');
 const Deck = require('../../models/deck');
+const DeckCard = require('../../models/deckcard');
 
 // 게임에 유저가 로그인함
 async function AddUser(socketId, user) {
@@ -95,15 +96,28 @@ async function GetDeckCards(deckId){
     //     return card.id;
     // });
     const cards = [];
-    for(let i=1;i<=10;i++){
-        cards.push(i);
-    }
-    for (let i = 1; i <= 10; i++) {
-        cards.push(i);
-    }
-    for (let i = 1; i <= 10; i++) {
-        cards.push(i);
-    }
+    // for(let i=1;i<=10;i++){
+    //     cards.push(i);
+    // }
+    // for (let i = 1; i <= 10; i++) {
+    //     cards.push(i);
+    // }
+    // for (let i = 1; i <= 10; i++) {
+    //     cards.push(i);
+    // }
+
+    const deckCards = await DeckCard.findAll({
+        where:{
+            'DeckId': deckId
+        }
+    });
+
+    deckCards.map((deckCard)=>{
+        for(let i=0;i<count;i++){
+            cards.push(CardId);
+        }
+    })
+
 
     return cards;
 }
@@ -138,7 +152,7 @@ const test = () => {
 
 
 //test();
-
+//test2();
 async function test2(){
     const cards = await GetDeckCards(1);
     console.log(cards);

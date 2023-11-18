@@ -22,7 +22,7 @@ class GameRoom implements RoomClient {
     readyCount:number;
 
     // user1 GameUser
-    constructor(user1: any, user2: any, id: any) {
+    constructor(user1: any, user2: any, id: any, deckIndex1:string, deckIndex2:string) {
         this.isActive = true;
         this.users = [];
         this.endAbility = [];
@@ -30,12 +30,14 @@ class GameRoom implements RoomClient {
         this.turn = new Turn(Info.MAX_PLAYER);
         this.readyCount = 0;
 
-        GetDeckCards(1).then(async (cards: Array<number>) => {
+        console.log("deckIndex1: ", deckIndex1);
+        console.log("deckIndex2: ", deckIndex2);
+        GetDeckCards(deckIndex1).then(async (cards: Array<number>) => {
             console.log("cards: ", cards);
             const gameUser1 = new GameUser(user1, cards);
             this.users.push(gameUser1);
 
-            const cards2 = await GetDeckCards(1);
+            const cards2 = await GetDeckCards(deckIndex2);
             const gameUser2 = new GameUser(user2, cards2);
             this.users.push(gameUser2);
 

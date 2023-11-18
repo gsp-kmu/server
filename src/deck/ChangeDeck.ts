@@ -34,6 +34,7 @@ class ChangeDeck{
                 );
 
                 //덱이 20장이 안되면 그 덱은 저장 안함
+                console.log("deckList length: ", this.decklist[i - 1].length);
                 if(this.decklist[i-1].length != 20){
                     flag = true;
                     continue;
