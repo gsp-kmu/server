@@ -41,7 +41,7 @@ app.post('/random', async (req, res) => {
     }
 });
 
-app.get('/getcoin', async (req, res) => {
+app.post('/getcoin', async (req, res) => {
     try {
         const coinSystem = require("./src/shop/getCoin.js");
         const { userId } = req.body;
