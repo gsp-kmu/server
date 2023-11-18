@@ -14,13 +14,23 @@ class RandomService{
     async Start(userId){
         console.log(userId + '님이 카드 뽑기를 시작합니다...');
 
-        let randomlist = []
-        const user = await User.findOne({
-            where:{
-                id : userId
-            }
-        })
+        let randomlist = [];
+        let duplicate = [];
 
+        duplicate.push(false);
+
+        const user = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+        
+        if (user.coin < 100) return [[],[]];
+        
+        await user.update({
+            coin : user.coin - 100
+        });
+        
         for(let i = 0; i<5; i++){
             let tmp = this.Random();
             randomlist.push(tmp);
@@ -40,18 +50,28 @@ class RandomService{
                 }
             })
             
-            await UserCard.update({
-                count : count.count+1
-            },
-            {
-                where : {
-                    UserId : user.id,
-                    CardId : tmp
-                }
-            });
+            if (count.count >= 2) {
+                duplicate.push(true);
+                await user.update({
+                    coin: user.coin + 10
+                });
+            }
+            else {
+                await UserCard.update({
+                    count : count.count+1
+                },
+                {
+                    where : {
+                        UserId : user.id,
+                        CardId : tmp
+                    }
+                });
+                
+                duplicate.push(false);
+            }
         }
         
-        return randomlist;
+        return [randomlist, duplicate];
     }
 
     //랜덤한 카드 뽑기

@@ -22,7 +22,11 @@ class LoginSystem{
             },
         },);
 
-        if(exist == null){
+        if (exist == null) {
+            let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+
+            if (reg.test(this._password) == false) return 0;
+
             const hash = await cryptoModule.createHash(this._password);
             const cryptedPW = hash.hashed;
             const salt = hash.salt;
@@ -56,13 +60,22 @@ class LoginSystem{
                 }
             });
             
+            await User.update({
+                coin : 500
+            },
+            {
+                where : {
+                    id : user.id
+                }
+            });
+            
 
             console.log("회원가입 성공");
-            return true;
+            return 1;
         }
         else{
             console.log("회원가입 실패");
-            return false;
+            return 2;
         }
     }
 
