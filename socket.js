@@ -81,6 +81,8 @@ module.exports = (server) => {
             });
 
             if(userState != null){
+                if(deckIndex == "")
+                    deckIndex = 1;
                 socket.deckIndex = deckIndex;
                 console.log(socket.id, " 매칭 시작함");
                 userState.state = Info.userState.Match;
