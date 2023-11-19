@@ -28,12 +28,12 @@ app.post('/random', async (req, res) => {
     try{
         const {userId} = req.body;
 
-        const [randomlist, duplicate] = await randomService.Start(userId);
+        const [randomlist, duplicate, coin] = await randomService.Start(userId);
 
         console.log(duplicate);
 
         if (randomlist.length == 0) res.status(400).json({ msg: "Coin is not enough" });
-        else res.status(200).json({msg : 'Successfully Random', cardList : randomlist, duplicate : duplicate});
+        else res.status(200).json({msg : 'Successfully Random', cardList : randomlist, duplicate : duplicate, coin : coin});
     }
     catch (err){
         console.log(err);

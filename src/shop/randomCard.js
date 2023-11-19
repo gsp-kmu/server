@@ -8,7 +8,7 @@ class RandomService{
 
     //각 카드별 확률
     //카드별 확률 합이 100이 되도록 구성 
-    _pbt = [9,7,7,8,6,8,9,7,8,8,1,2,2,3,1,2,1,3,7,1];
+    _pbt = [9,8,7,8,6,8,9,7,8,8,1,2,2,2,1,2,1,3,7,1];
 
     //카드 뽑기 시작
     async Start(userId){
@@ -25,7 +25,7 @@ class RandomService{
             }
         });
         
-        if (user.coin < 100) return [[],[]];
+        if (user.coin < 100) return [[],[],0];
         
         await user.update({
             coin : user.coin - 100
@@ -71,7 +71,7 @@ class RandomService{
             }
         }
         
-        return [randomlist, duplicate];
+        return [randomlist, duplicate, user.coin];
     }
 
     //랜덤한 카드 뽑기
@@ -80,7 +80,6 @@ class RandomService{
         let prev = 0;
         let next = 0;
         let res = '';
-
         for(let i = 0; i<this._pbt.length; i++){
             if(random >= 100){
                 res = this._card[this._pbt.length-1];
