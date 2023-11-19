@@ -38,11 +38,23 @@ module.exports = (server) => {
 
             console.log(user);
             if(user != null){
-                console.log("AddUserId");
-                AddUserId(socket.id, user.UserId);
+                const UserId = user.UserId;
+                const userState = await UserState.findOne({
+                    where:{
+                        'UserId':UserId,
+                    }
+                });
+
+                if(userState != null){
+                    socket.emit("login_fail", "");
+                    console.log("중복 로그인!!!!!!!!!!!!!!!!!");
+                }
+                else{
+                    AddUserId(socket.id, user.UserId);
+                    socket.emit("initid", user.UserId);
+                    socket.emit("login_success", "");
+                }
             }
-            socket.emit("initid", user.UserId);
-            socket.emit("login_success", "");
         });
 
         socket.on(Info.EVENT_MESSAGE.MATCH_START, async () => {
@@ -139,3 +151,4 @@ module.exports.getIO =()=>{
     return io;
 }
 module.exports.io = io;
+
