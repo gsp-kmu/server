@@ -5,6 +5,7 @@ const UserCard = require("../../models/usercard");
 const cryptoModule = require("./cryptos");
 const crypto = require('crypto');
 const User = require('../../models/user');
+import { sequelize } from "../../models";
 
 class LoginSystem{
     constructor(id, pass){
@@ -39,8 +40,36 @@ class LoginSystem{
 
             //새로 가입한 유저를 위한 덱 공간 5개 생성
             for(let i = 1; i<=5; i++){
-                const deck = await Deck.create({name:i});
+                const deck = await Deck.create({ name: i });
                 deck.setUser(user);
+                if (i == 1) {
+                    const basic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                    const cards = await Card.findAll({
+                    where:{
+                        id: basic
+                    }
+                    });
+
+                    await deck.setCards(cards);
+
+                    const result = basic.reduce((arr,cur)=> {
+                        arr.set(cur, (arr.get(cur)||0) +1) ;
+                        return arr;
+                    },new Map());
+                
+                    for (let [key, value] of result.entries()) {
+                        const query = 'UPDATE deckcard SET count = :value WHERE DeckId IN (SELECT id FROM decks WHERE UserId = :userId AND id = :deckId) AND CardId = :cardId';
+                        const tmp = (user.id - 1) * 5 + i;
+                        await sequelize.query(query,{
+                            replacements: {
+                                value: value,
+                                userId: user.id,
+                                deckId: tmp,
+                                cardId : key
+                            }
+                        });
+                    }
+                }
             }
 
             const decklist = [1,2,3,4,5,6,7,8,9,10];
