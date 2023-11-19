@@ -49,6 +49,7 @@ class MatchController {
         const deckIndex = socket.deckIndex;
         if(userId == undefined || deckIndex == undefined)
             return 1;
+        
         console.log("userId: ", userId, " deckIndex:  ", deckIndex);
         const deckId = (userId - 1) * 5 + deckIndex;
         return deckId;
