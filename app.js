@@ -28,14 +28,33 @@ app.post('/random', async (req, res) => {
     try{
         const {userId} = req.body;
 
-        const value = await randomService.Start(userId);
-        res.status(200).json({msg : 'Successfully Random', cardList : value});
+        const [randomlist, duplicate] = await randomService.Start(userId);
+
+        console.log(duplicate);
+
+        if (randomlist.length == 0) res.status(400).json({ msg: "Coin is not enough" });
+        else res.status(200).json({msg : 'Successfully Random', cardList : randomlist, duplicate : duplicate});
     }
     catch (err){
         console.log(err);
-        res.status(400).json({msg : "Unexpected Error"});
+        res.status(401).json({msg : "Unexpected Error"});
     }
 });
+
+app.post('/getcoin', async (req, res) => {
+    try {
+        const coinSystem = require("./src/shop/getCoin.js");
+        const { userId } = req.body;
+
+        const coin = await coinSystem.getCoin(userId);
+
+        res.status(200).json({ coin: coin });
+    }
+    catch (err){
+        console.log(err);
+        res.status(400).json({ msg: "Unexpected Error" });
+    }
+})
 
 // 회원가입
 app.post("/register", async (req, res) => {
@@ -47,18 +66,22 @@ app.post("/register", async (req, res) => {
         const module = new LoginSystem(id, password);
         const execute = await module.Register();
 
-        if(execute == true){
+        if(execute == 1){
             console.log(id + "님이 회원가입 하셨습니다.");
             res.status(200).send('success register');
         }
-        else{
+        else if (execute == 0) {
+            console.log(id + "비밀번호 형식이 일치하지 않습니다.");
+            res.status(400).send('Password Pattern is not good');
+        }
+        else if(execute == 2){
             console.log(id + "님은 이미 등록된 회원입니다.");
-            res.status(400).send('duplicate username : ' + id);
+            res.status(401).send('duplicate username : ' + id);
         }
     }
     catch (err){
         console.log(err);
-        res.status(401).send('Unexpected Error');
+        res.status(402).send('Unexpected Error');
     }
 })
 
