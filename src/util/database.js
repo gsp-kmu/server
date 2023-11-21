@@ -137,7 +137,9 @@ async function GetSocketIdToUser(socketId){
             'socketId': socketId,
         }
     });
-
+    if(userState == undefined)
+        return undefined;
+    
     return userState.User;
 }
 

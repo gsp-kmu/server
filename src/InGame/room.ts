@@ -56,6 +56,7 @@ class GameRoom implements RoomClient {
             const room = io.of('/room' + this.id);
             
             socket.on(Info.EVENT_MESSAGE.INGAME_CLIENT_READY, async ()=>{
+                this.CheckRoomClose = this.RealCheckRoomClose;
                 this.readyCount += 1;
                 if(this.readyCount >= Info.MAX_PLAYER){
                     for (let j = 0; j < this.users.length; j++) {
@@ -65,7 +66,6 @@ class GameRoom implements RoomClient {
                     this.socket2 = GetSocket(this.users[1].socketId);
         
                     this.SendInitMessage();
-                    this.CheckRoomClose = this.RealCheckRoomClose;
                 }
             });
            

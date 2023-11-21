@@ -50,6 +50,7 @@ module.exports = (server) => {
                     console.log("중복 로그인!!!!!!!!!!!!!!!!!");
                 }
                 else{
+                    console.log(data, " 유저 로그인 성공");
                     AddUserId(socket.id, user.UserId);
                     socket.emit("initid", user.UserId);
                     socket.emit("login_success", "");
