@@ -35,7 +35,7 @@ class MatchController {
     async MatchUsers(user1, user2) {
         const deckId1 = await this.getDeckId(user1);
         const deckId2 = await this.getDeckId(user2);
-
+        
         const room = await roomService.CreateRoom(user1, user2, deckId1, deckId2);
         console.log("매칭 성공");
         roomService.AddRoom(room);

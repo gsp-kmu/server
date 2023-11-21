@@ -35,12 +35,18 @@ async function SetUserState(socketId, state){
             'socketId': socketId,
         }
     });
+
+    if(userState == undefined)
+        return;
+
     userState.state = state;
     await userState.save();
 }
 
 async function AddUserWinLose(socketId, winValue, loseValue){
     const user = await GetSocketIdToUser(socketId);
+    if(user == undefined)
+        return;
     
     user.win += winValue;
     user.lose += loseValue;
