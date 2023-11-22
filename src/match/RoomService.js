@@ -17,19 +17,21 @@ class RoomService{
         user1Socket.join(roomId);
         user2Socket.join(roomId);
 
+        console.log(user1.id)
+
         user1Socket.emit("test-message", "testtesttest");
         await room.addUser([user1, user2]);
         console.log('room 생성 완료');
         
-        return this.CreateGameRoom(userState1.socketid, userState2.socketid, room, deckId1, deckId2);
+        return this.CreateGameRoom(user1.id, user2.id, userState1.socketid, userState2.socketid, room, deckId1, deckId2);
     }
 
     CreateSocketRoom(){
 
     }
 
-    CreateGameRoom(user1, user2, room, deckId1, deckId2){
-        return new GameRoom(user1, user2, room.id, deckId1, deckId2);
+    CreateGameRoom(user1Id, user2Id, user1, user2, room, deckId1, deckId2){
+        return new GameRoom(user1Id, user2Id, user1, user2, room.id, deckId1, deckId2);
     }
 
     AddRoom(room){

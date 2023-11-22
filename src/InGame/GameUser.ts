@@ -4,12 +4,14 @@ import {Hand} from "./Hand";
 import { Holder } from "./Holder";
 
 export class GameUser{
+    id:any;
     socketId: string;
     deck: Deck;
     hand: Hand;
     holder: Array<Holder>;
 
-    constructor(socketId:string, cards:Array<number>){
+    constructor(id: any, socketId: string, cards: Array<number>) {
+        this.id = id;
         this.socketId = socketId;
 
         this.deck = new Deck(cards);
