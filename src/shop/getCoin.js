@@ -10,4 +10,16 @@ async function getCoin(userId) {
     return user.coin;
 };
 
-module.exports = { getCoin };
+async function setCoin(userId) {
+    await User.update({
+                coin : 10000
+            },
+            {
+                where : {
+                    id : userId
+                }
+            });
+};
+
+
+module.exports = { getCoin, setCoin };

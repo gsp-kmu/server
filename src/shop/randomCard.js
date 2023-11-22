@@ -17,8 +17,6 @@ class RandomService{
         let randomlist = [];
         let duplicate = [];
 
-        duplicate.push(false);
-
         const user = await User.findOne({
             where: {
                 id: userId
