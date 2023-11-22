@@ -46,7 +46,9 @@ class GameRoom implements RoomClient {
 
     SendInitMessage() {
         this.SendFirstCard();
-        this.SendTurn();
+        setTimeout(()=>{
+            this.SendTurn();
+        }, 1000);
     }
 
     RegisterEvents() {
@@ -83,7 +85,9 @@ class GameRoom implements RoomClient {
 
                     this.turn.NextTurn();
                     console.log(this.users[i].socketId, "해당 유저가 턴을 끝냈다고 메시지 보냄.");
-                    this.SendTurn();
+                    setTimeout(()=>{
+                        this.SendTurn();
+                    }, 2000);
                 }
             });
             
@@ -210,7 +214,7 @@ class GameRoom implements RoomClient {
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                     Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
-                }, 2000);
+                }, 3000);
                 turn = '1';
             }
 
@@ -221,8 +225,7 @@ class GameRoom implements RoomClient {
     SendFirstCard() {
         for (let i = 0; i < this.users.length; i++) {
             this.users[i].Draw();
-            this.users[i].Draw();
-            const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0], this.users[i].hand.cards[1]);
+            const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0]);
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_FIRST_CARD, firstCard);
         }
     }
