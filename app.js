@@ -15,7 +15,7 @@ sequelize.sync({force:false})
     .then(()=>{
         console.log('데이터베이스 연결 됨');
         CreateCard();
-        sequelize.query("DELETE FROM userstate;").then((result) => {
+        sequelize.query("DELETE FROM userState;").then((result) => {
             console.log('쿼리 실행 결과:', result);
         });
     })
