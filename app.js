@@ -45,16 +45,41 @@ app.post('/getcoin', async (req, res) => {
     try {
         const coinSystem = require("./src/shop/getCoin.js");
         const { userId } = req.body;
-
+        
         const coin = await coinSystem.getCoin(userId);
 
         res.status(200).json({ coin: coin });
     }
-    catch (err){
+    catch (err) {
         console.log(err);
         res.status(400).json({ msg: "Unexpected Error" });
     }
-})
+});
+
+//코인 치트
+app.post('/setcoin', async (req, res) => {
+    try {
+        const coinCheat = require('./src/shop/getCoin.js');
+        const { userId, cheatCode } = req.body;
+
+        console.log(cheatCode);
+        console.log(process.env.CHEAT_CODE);
+
+        if (cheatCode == process.env.CHEAT_CODE) {
+            await coinCheat.setCoin(userId);
+            
+            const coin = await coinCheat.getCoin(userId);
+            res.status(200).json({ coin: coin });
+        }
+        else {
+            res.status(400).json({ msg: "Unexpected Error" });
+        }
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ msg: "Unexpected Error" });
+    }
+});
 
 // 회원가입
 app.post("/register", async (req, res) => {
