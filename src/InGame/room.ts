@@ -214,7 +214,7 @@ class GameRoom implements RoomClient {
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                     Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
-                }, 3000);
+                }, 2000);
                 turn = '1';
             }
 
