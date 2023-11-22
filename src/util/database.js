@@ -54,6 +54,16 @@ async function AddUserWinLose(socketId, winValue, loseValue){
 
 }
 
+async function AddCoin(socketId, coinValue) {
+    const user = await GetSocketIdToUser(socketId);
+    if (user == undefined)
+        return;
+
+    user.coin += coinValue;
+    await user.save();
+
+}
+
 
 async function CreateCard(){
     const CreateCardF = (name)=>{
@@ -144,7 +154,8 @@ async function GetSocketIdToUser(socketId){
 }
 
 module.exports = { AddUser, AddUserId, DestroyRoom, SetUserState, AddUserWinLose, CreateCard, GetDeckCards, GetDeck,
-    GetSocketIdToUser};
+    GetSocketIdToUser, AddCoin
+};
 
 
 const test = () => {

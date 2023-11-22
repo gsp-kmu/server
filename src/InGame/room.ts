@@ -1,7 +1,7 @@
 const Info = require('../common/Info');
 const resultService = require('./ResultService').resultService;
 const { Send, GetIO, GetSocket } = require('../common/NetworkService');
-const { SetUserState, AddUserWinLose, GetDeckCards } = require('../util/database');
+const { SetUserState, AddUserWinLose, GetDeckCards, AddCoin } = require('../util/database');
 const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
@@ -159,10 +159,12 @@ class GameRoom implements RoomClient {
             SetUserState(this.users[i].socketId, Info.userState.Join);
             if (loseSocketId != this.users[i].socketId) {
                 AddUserWinLose(this.users[i].socketId, 1, 0);
+                AddCoin(this.users[i].socketId, 50);
                 Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
+                AddCoin(this.users[i].socketId, 20);
                 Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
             }
         }
@@ -173,10 +175,12 @@ class GameRoom implements RoomClient {
             SetUserState(this.users[i].socketId, Info.userState.Join);
             if (winSocketId == this.users[i].socketId) {
                 AddUserWinLose(winSocketId, 1, 0);
+                AddCoin(this.users[i].socketId, 50);
                 Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
+                AddCoin(this.users[i].socketId, 20);
                 Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
             }
         }
