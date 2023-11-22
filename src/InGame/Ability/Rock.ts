@@ -18,6 +18,8 @@ export class Rock extends Ability{
     Use(roomClient: RoomClient) {
         roomClient.turn.isCurrentTurnProgress = false;
         roomClient.turn.currentTurnCount += 2;
-        roomClient.SendTurn();
+        setTimeout(() => {
+            roomClient.SendTurn();
+        }, 1000);
     }
 };
