@@ -160,12 +160,16 @@ class GameRoom implements RoomClient {
             if (loseSocketId != this.users[i].socketId) {
                 AddUserWinLose(this.users[i].socketId, 1, 0);
                 AddCoin(this.users[i].socketId, 50);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                }, 1500);
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
                 AddCoin(this.users[i].socketId, 20);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                }, 1500);
             }
         }
     }
@@ -176,12 +180,17 @@ class GameRoom implements RoomClient {
             if (winSocketId == this.users[i].socketId) {
                 AddUserWinLose(winSocketId, 1, 0);
                 AddCoin(this.users[i].socketId, 50);
-                Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                
+                setTimeout(() => {
+                    Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                }, 1500);
             }
             else {
                 AddUserWinLose(this.users[i].socketId, 0, 1);
                 AddCoin(this.users[i].socketId, 20);
-                Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                }, 1500);
             }
         }
     }

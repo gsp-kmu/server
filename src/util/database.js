@@ -111,7 +111,7 @@ async function GetDeckCards(deckId){
     // return cards.map((card)=>{
     //     return card.id;
     // });
-    const cards = [];
+    let cards = [];
     // for(let i=1;i<=10;i++){
     //     cards.push(i);
     // }
@@ -122,19 +122,34 @@ async function GetDeckCards(deckId){
     //     cards.push(i);
     // }
 
-    const deckCards = await DeckCard.findAll({
-        where:{
-            'DeckId': deckId
-        }
-    });
+    // const deckCards = await DeckCard.findAll({
+    //     where:{
+    //         'DeckId': deckId
+    //     }
+    // });
 
-    deckCards.map((deckCard)=>{
-        const count = deckCard.count;
-        const CardId = deckCard.CardId;
-        for(let i=0;i<count;i++){
-            cards.push(CardId);
-        }
-    })
+    // deckCards.map((deckCard)=>{
+    //     // const count = deckCard.count;
+    //     // const CardId = deckCard.CardId;
+    //     // for(let i=0;i<count;i++){
+    //     //     cards.push(CardId);
+    //     // }
+    // });
+    const tmp_cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const cards1 = tmp_cards.slice();
+    const cards2 = tmp_cards.slice();
+    console.log(cards1)
+
+    for (let i = 9; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards1[i], cards1[j]] = [cards1[j], cards1[i]];
+    }
+    for (let i = 9; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards2[i], cards2[j]] = [cards2[j], cards2[i]];
+    }
+
+    cards = cards1.concat(cards2);
 
 
     return cards;
@@ -187,5 +202,4 @@ async function test3(){
     const cards = await Card.findAll();
     deck.addCards(cards);
 }
-
 //test3();
