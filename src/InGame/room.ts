@@ -219,6 +219,9 @@ class GameRoom implements RoomClient {
 
 
     SendTurn() {
+        if(this.isActive == false)
+            return 0;
+        
         const currentTurn = this.turn.currentTurn;
         for (let i = 0; i < this.users.length; i++) {
             let turn = '0';
