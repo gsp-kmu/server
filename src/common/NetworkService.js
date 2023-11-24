@@ -35,13 +35,9 @@ class NetworkService{
         }
     }
 
-    static FirstCard = (card1, card2)=>{
+    static FirstCard = (card1)=>{
         const card11 = NetworkService.Card(card1);
-        const card22 = NetworkService.Card(card2);
-        return{
-            "card1": card11,
-            "card2": card22,
-        }
+        return card11
     }
 }
 

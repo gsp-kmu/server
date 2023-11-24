@@ -1,17 +1,14 @@
 import { Ability } from "../Ability/Ability";
 import { Card } from "./Card";
 import { RoomClient } from "../RoomClient";
-import { Empty } from "../Ability/Empty";
+import { Luna } from "../Ability/Luna";
 import { Digit } from "../../common/Digit";
 
 export class LunaCard extends Card {
-    ability: Ability;
-    constructor(id: number, number:number, data:any) {
-        const new_data = data;
-        new_data.drawDigit = Digit.one;
-        super(id, number, new_data);
+    constructor(id: number, number: number, data: any, cardId:number) {
+        super(id, number, data, cardId);
         this.number = number;
-        this.ability = new Empty(this.id);
+        this.ability = new Luna(id, data.drawDigit, number, cardId);
     }
 
     Use(roomClient:RoomClient){

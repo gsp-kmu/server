@@ -13,6 +13,7 @@ module.exports =  class Info {
         MATCH_SUCCESS:'match_success',
         MATCH_CANCEL: 'match_cancel',
         MATCH_END:'match_end',
+        INGAME_CLIENT_READY: 'ingame_client_ready',
         INGAME_INIT_ID: 'ingame_init_id',
         INGAME_END:'ingame_end',
         SOCKET_LOGIN:'socket_login',
@@ -25,6 +26,7 @@ module.exports =  class Info {
         INGAME_PLAY_CARD: 'ingame_play_card',
         INGAME_PLAY_SEND: 'ingame_play_send',
         INGAME_PLAY_RECV: 'ingame_play_recv',
+        INGAME_SURRENDER: 'ingame_surrender',
         TEST:'test',
     })
 }

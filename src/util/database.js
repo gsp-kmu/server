@@ -3,6 +3,7 @@ const UserState = require('../../models/userstate');
 const Info = require('../common/Info');
 const Room = require('../../models/room');
 const Deck = require('../../models/deck');
+const DeckCard = require('../../models/deckcard');
 
 // 게임에 유저가 로그인함
 async function AddUser(socketId, user) {
@@ -34,15 +35,31 @@ async function SetUserState(socketId, state){
             'socketId': socketId,
         }
     });
+
+    if(userState == undefined)
+        return;
+
     userState.state = state;
     await userState.save();
 }
 
 async function AddUserWinLose(socketId, winValue, loseValue){
     const user = await GetSocketIdToUser(socketId);
+    if(user == undefined)
+        return;
     
     user.win += winValue;
     user.lose += loseValue;
+    await user.save();
+
+}
+
+async function AddCoin(socketId, coinValue) {
+    const user = await GetSocketIdToUser(socketId);
+    if (user == undefined)
+        return;
+
+    user.coin += coinValue;
     await user.save();
 
 }
@@ -67,6 +84,17 @@ async function CreateCard(){
     CreateCardF('점술사');
     CreateCardF('테라');
     CreateCardF('대천사');
+
+    CreateCardF('구미호2');
+    CreateCardF('메지션2');
+    CreateCardF('영매사2');
+    CreateCardF('솔2');
+    CreateCardF('스나이퍼2');
+    CreateCardF('흑화 아이코2');
+    CreateCardF('다크 엘프2');
+    CreateCardF('점술사2');
+    CreateCardF('테라2');
+    CreateCardF('대천사2');
 }
 async function GetDeck(deckId){
     const deck = await Deck.findOne({
@@ -84,9 +112,29 @@ async function GetDeckCards(deckId){
     //     return card.id;
     // });
     const cards = [];
-    for(let i=1;i<=10;i++){
-        cards.push(i);
-    }
+    // for(let i=1;i<=10;i++){
+    //     cards.push(i);
+    // }
+    // for (let i = 1; i <= 10; i++) {
+    //     cards.push(i);
+    // }
+    // for (let i = 1; i <= 10; i++) {
+    //     cards.push(i);
+    // }
+
+    const deckCards = await DeckCard.findAll({
+        where:{
+            'DeckId': deckId
+        }
+    });
+
+    deckCards.map((deckCard)=>{
+        const count = deckCard.count;
+        const CardId = deckCard.CardId;
+        for(let i=0;i<count;i++){
+            cards.push(CardId);
+        }
+    });
 
     return cards;
 }
@@ -98,12 +146,15 @@ async function GetSocketIdToUser(socketId){
             'socketId': socketId,
         }
     });
-
+    if(userState == undefined)
+        return undefined;
+    
     return userState.User;
 }
 
 module.exports = { AddUser, AddUserId, DestroyRoom, SetUserState, AddUserWinLose, CreateCard, GetDeckCards, GetDeck,
-    GetSocketIdToUser};
+    GetSocketIdToUser, AddCoin
+};
 
 
 const test = () => {
@@ -121,7 +172,7 @@ const test = () => {
 
 
 //test();
-
+//test2();
 async function test2(){
     const cards = await GetDeckCards(1);
     console.log(cards);
@@ -135,5 +186,4 @@ async function test3(){
     const cards = await Card.findAll();
     deck.addCards(cards);
 }
-
 //test3();

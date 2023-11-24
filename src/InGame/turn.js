@@ -4,7 +4,7 @@ class Turn{
     constructor(length){
         this.length = length;
         this.currentTurn = Utill.GetRandomNumber(0, length);
-        this.currentTurnCount = 0;
+        this.currentTurnCount = 1;
         this.isCurrentTurnProgress = false;
     }
 

@@ -7,8 +7,8 @@ import { Card } from "../Card/Card";
 
 // 게임 종료시 이 카드의 숫자는 옆카드 숫자와 같게 됨
 export class Rock extends Ability{
-    constructor(myId:number){
-        super(myId);
+    constructor(myId: number, number: number, cardId: number){
+        super(myId, number, cardId);
     }
 
     Play(roomClient: RoomClient){
@@ -17,6 +17,9 @@ export class Rock extends Ability{
 
     Use(roomClient: RoomClient) {
         roomClient.turn.isCurrentTurnProgress = false;
-        roomClient.SendTurn();
+        roomClient.turn.currentTurnCount += 2;
+        setTimeout(() => {
+            roomClient.SendTurn();
+        }, 1000);
     }
 };

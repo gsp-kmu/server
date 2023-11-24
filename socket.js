@@ -38,12 +38,42 @@ module.exports = (server) => {
 
             console.log(user);
             if(user != null){
-                console.log("AddUserId");
-                AddUserId(socket.id, user.UserId);
+                const UserId = user.UserId;
+                const userState = await UserState.findOne({
+                    where:{
+                        'UserId':UserId,
+                    }
+                });
+
+                if(userState != null){
+                    socket.emit("login_fail", "");
+                    console.log("중복 로그인!!!!!!!!!!!!!!!!!");
+                }
+                else{
+                    console.log(data, " 유저 로그인 성공");
+                    AddUserId(socket.id, user.UserId);
+                    socket.emit("initid", user.UserId);
+                    socket.emit("login_success", "");
+                }
             }
         });
 
-        socket.on(Info.EVENT_MESSAGE.MATCH_START, async ()=>{
+        socket.on(Info.EVENT_MESSAGE.MATCH_START, async () => {
+            const userState = await UserState.findOne({
+                where: {
+                    'socketId': socket.id,
+                    'state': Info.userState.Join,
+                }
+            });
+
+            if (userState != null) {
+                console.log(socket.id, " 매칭 시작함");
+                userState.state = Info.userState.Match;
+                await userState.save();
+            }
+        });
+
+        socket.on(Info.EVENT_MESSAGE.MATCH_START, async(deckIndex)=>{
             const userState = await UserState.findOne({
                 where:{
                     'socketId':socket.id,
@@ -52,6 +82,9 @@ module.exports = (server) => {
             });
 
             if(userState != null){
+                if(deckIndex == "")
+                    deckIndex = 1;
+                socket.deckIndex = deckIndex;
                 console.log(socket.id, " 매칭 시작함");
                 userState.state = Info.userState.Match;
                 await userState.save();
@@ -107,6 +140,10 @@ module.exports = (server) => {
             sequelize.query(query).then((result) => {
                 console.log('쿼리 실행 결과:', result);
             });
+        } 
+        else if (input.startsWith('notice ')) {
+            const data = input.substring(6); 
+            io.emit("notice", data);
         }
     });
     
@@ -117,3 +154,4 @@ module.exports.getIO =()=>{
     return io;
 }
 module.exports.io = io;
+

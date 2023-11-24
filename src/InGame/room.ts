@@ -1,14 +1,14 @@
 const Info = require('../common/Info');
 const resultService = require('./ResultService').resultService;
 const { Send, GetIO, GetSocket } = require('../common/NetworkService');
-const { SetUserState, AddUserWinLose, GetDeckCards } = require('../util/database');
+const { SetUserState, AddUserWinLose, GetDeckCards, AddCoin } = require('../util/database');
 const { NetworkService } = require('../common/NetworkService');
 import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 import { CardFactory } from "./Card/CardFactory";
-import { eventNames } from "process";
 import Turn from "./turn";
+import { Digit } from "../common/Digit";
 
 class GameRoom implements RoomClient {
     isActive: boolean;
@@ -18,48 +18,59 @@ class GameRoom implements RoomClient {
     turn: Turn;
     socket1: any;
     socket2: any;
+    readyCount:number;
 
     // user1 GameUser
-    constructor(user1: any, user2: any, id: any) {
+    constructor(user1Id: any, user2Id:any, user1: any, user2: any, id: any, deckIndex1:string, deckIndex2:string) {
         this.isActive = true;
         this.users = [];
         this.endAbility = [];
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
+        this.readyCount = 0;
 
-        GetDeckCards(1).then(async (cards: Array<number>) => {
+        console.log("deckIndex1: ", deckIndex1);
+        console.log("deckIndex2: ", deckIndex2);
+        GetDeckCards(deckIndex1).then(async (cards: Array<number>) => {
             console.log("cards: ", cards);
-            const gameUser1 = new GameUser(user1, cards);
+            const gameUser1 = new GameUser(user1Id, user1, cards);
             this.users.push(gameUser1);
 
-            const cards2 = await GetDeckCards(1);
-            const gameUser2 = new GameUser(user2, cards2);
+            const cards2 = await GetDeckCards(deckIndex2);
+            const gameUser2 = new GameUser(user2Id, user2, cards2);
             this.users.push(gameUser2);
 
-            for (let j = 0; j < this.users.length; j++) {
-                Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
-            }
-            this.socket1 = GetSocket(user1);
-            this.socket2 = GetSocket(user2);
-
-            this.SendInitMessage();
-            this.RegisterEvent();
-
-            this.CheckRoomClose = this.RealCheckRoomClose;
+            this.RegisterEvents();
         });
     }
 
     SendInitMessage() {
         this.SendFirstCard();
-        this.SendTurn();
+        setTimeout(()=>{
+            this.SendTurn();
+        }, 2000);
     }
 
-    RegisterEvent() {
+    RegisterEvents() {
         for (let i = 0; i < Info.MAX_PLAYER; i++) {
             const socket = GetSocket(this.users[i].socketId);
             const io = GetIO();
             const room = io.of('/room' + this.id);
-
+            
+            socket.on(Info.EVENT_MESSAGE.INGAME_CLIENT_READY, async ()=>{
+                this.CheckRoomClose = this.RealCheckRoomClose;
+                this.readyCount += 1;
+                if(this.readyCount >= Info.MAX_PLAYER){
+                    for (let j = 0; j < this.users.length; j++) {
+                        Send(this.users[j].socketId, Info.EVENT_MESSAGE.INGAME_INIT_ID, j);
+                    }
+                    this.socket1 = GetSocket(this.users[0].socketId);
+                    this.socket2 = GetSocket(this.users[1].socketId);
+        
+                    this.SendInitMessage();
+                }
+            });
+           
             socket.on("cheat_ingame_draw_card", (data:any) => {
                 this.users[i].hand.AddCard(data.id);
                 Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(data.id));
@@ -69,12 +80,17 @@ class GameRoom implements RoomClient {
             socket.on(Info.EVENT_MESSAGE.INGAME_TURN_END, () => {
                 // Turn_End 메시지를 보낸 유저와 현재 turn 유저와 같으면 실행
                 if (i == this.turn.GetTurn() && this.turn.isCurrentTurnProgress == true) {
+                    if (this.turn.CheckTurnEnd() == true)
+                        return;
+
                     this.turn.NextTurn();
                     console.log(this.users[i].socketId, "해당 유저가 턴을 끝냈다고 메시지 보냄.");
-                    this.SendTurn();
+                    setTimeout(()=>{
+                        this.SendTurn();
+                    }, 2000);
                 }
             });
-
+            
             socket.on(Info.EVENT_MESSAGE.TEST, (data: any) => {
                 console.log(i, "  test:  ", data);
             });
@@ -93,7 +109,10 @@ class GameRoom implements RoomClient {
                         'targetDigit':data.targetDigit,
                         'targetCardIndex':data.targetCardIndex,
                     };
-                    console.log('sendData:  ', sendData);
+                    let testData = JSON.parse(JSON.stringify(sendData));;
+                    testData.drawDigit = Digit[testData.drawDigit];
+                    testData.targetDigit = Digit[testData.targetDigit];
+                    console.log('sendData:  ', testData);
                     this.PlayCard(i, data);
                     this.SendMessage(Info.EVENT_MESSAGE.INGAME_PLAY_RECV, sendData);
                     const a = this.users[0].holder[1].GetNumber() * 10 + this.users[0].holder[0].GetNumber();
@@ -101,8 +120,15 @@ class GameRoom implements RoomClient {
 
                     console.log("room" + this.id, ": user1 number: ", a);
                     console.log("room" + this.id, ": user2 number: ", b);
+                    console.log("userHand값은2:  ", this.users[i].hand.cards);
                 }
             });
+            
+            socket.on(Info.EVENT_MESSAGE.INGAME_SURRENDER, (data)=>{
+                this.GameEndLose(this.users[i].socketId);
+                this.turn.currentTurnCount = Info.MAX_TURN * 2;
+                this.isActive = false;
+            })
         }
     }
 
@@ -124,17 +150,47 @@ class GameRoom implements RoomClient {
             const winSocketId: string = result.user.socketId;
 
             console.log("room" + this.id, ": 얘가 승리함 ㅅㄱ", winSocketId);
+            this.GameEnd(winSocketId);
+        }
+    }
+    
+    GameEndLose(loseSocketId){
+        for (let i = 0; i < this.users.length; i++) {
+            SetUserState(this.users[i].socketId, Info.userState.Join);
+            if (loseSocketId != this.users[i].socketId) {
+                AddUserWinLose(this.users[i].socketId, 1, 0);
+                AddCoin(this.users[i].socketId, 50);
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                }, 1500);
+            }
+            else {
+                AddUserWinLose(this.users[i].socketId, 0, 1);
+                AddCoin(this.users[i].socketId, 20);
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                }, 1500);
+            }
+        }
+    }
 
-            for (let i = 0; i < this.users.length; i++) {
-                SetUserState(this.users[i].socketId, Info.userState.Join);
-                if (winSocketId == this.users[i].socketId) {
-                    AddUserWinLose(winSocketId, 1, 0);
-                    Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("0"));
-                }
-                else {
-                    AddUserWinLose(this.users[i].socketId, 0, 1);
-                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_WIN, NetworkService.InGameEnd("1"));
-                }
+    GameEnd(winSocketId:string){
+        for (let i = 0; i < this.users.length; i++) {
+            SetUserState(this.users[i].socketId, Info.userState.Join);
+            if (winSocketId == this.users[i].socketId) {
+                AddUserWinLose(winSocketId, 1, 0);
+                AddCoin(this.users[i].socketId, 50);
+                
+                setTimeout(() => {
+                    Send(winSocketId, Info.EVENT_MESSAGE.INGAME_END_WIN, "");
+                }, 1500);
+            }
+            else {
+                AddUserWinLose(this.users[i].socketId, 0, 1);
+                AddCoin(this.users[i].socketId, 20);
+                setTimeout(() => {
+                    Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_END_LOSE, "");
+                }, 1500);
             }
         }
     }
@@ -163,6 +219,9 @@ class GameRoom implements RoomClient {
 
 
     SendTurn() {
+        if(this.isActive == false)
+            return 0;
+        
         const currentTurn = this.turn.currentTurn;
         for (let i = 0; i < this.users.length; i++) {
             let turn = '0';
@@ -171,7 +230,7 @@ class GameRoom implements RoomClient {
                     const card = this.users[i].Draw();
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                     Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
-                }, 2000);
+                }, 1000);
                 turn = '1';
             }
 
@@ -182,8 +241,7 @@ class GameRoom implements RoomClient {
     SendFirstCard() {
         for (let i = 0; i < this.users.length; i++) {
             this.users[i].Draw();
-            this.users[i].Draw();
-            const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0], this.users[i].hand.cards[1]);
+            const firstCard = NetworkService.FirstCard(this.users[i].hand.cards[0]);
             Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_FIRST_CARD, firstCard);
         }
     }

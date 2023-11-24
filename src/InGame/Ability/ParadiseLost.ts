@@ -1,11 +1,11 @@
 import { GameUser } from "../GameUser";
 import { RoomClient } from "../RoomClient";
-import { Ability } from "../Ability/Ability";
+import { Ability } from "./Ability";
 import { Digit } from "../../common/Digit";
 
 export class ParadiseLost extends Ability {
-    constructor(myId: number) {
-        super(myId);
+    constructor(myId: number, number: number, cardId: number) {
+        super(myId, number, cardId);
     }
 
     Play(roomClient: RoomClient) {
@@ -22,7 +22,7 @@ export class ParadiseLost extends Ability {
             const ten = users[i].getTen().GetLast();
 
             if(one == undefined || ten == undefined)
-                continue;
+                break;
 
             users[i].RemoveCardOne();
             users[i].RemoveCardTen();

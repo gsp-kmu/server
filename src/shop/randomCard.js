@@ -8,15 +8,28 @@ class RandomService{
 
     //각 카드별 확률
     //카드별 확률 합이 100이 되도록 구성 
-    _pbt = [9,9,9,8,5,5,5,5,5,5,5,5,5,5,5,5,2,1,1,1];
+    _pbt = [1,1,7,1,6,8,1,7,8,8,9,2,2,2,8,2,8,3,7,9];
 
     //카드 뽑기 시작
     async Start(userId){
         console.log(userId + '님이 카드 뽑기를 시작합니다...');
 
-        let randomlist = []
+        let randomlist = [];
+        let duplicate = [];
 
-        for(let i = 0; i<4; i++){
+        const user = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+        
+        if (user.coin < 100) return [[],[],0];
+        
+        await user.update({
+            coin : user.coin - 100
+        });
+        
+        for(let i = 0; i<5; i++){
             let tmp = this.Random();
             randomlist.push(tmp);
 
@@ -26,12 +39,6 @@ class RandomService{
                 }
             });
 
-            const user = await User.findOne({
-                where:{
-                    id : userId
-                }
-            })
-
             await user.addCard(card);
 
             const count = await UserCard.findOne({
@@ -40,19 +47,29 @@ class RandomService{
                     cardId : tmp
                 }
             })
-
-            await UserCard.update({
-                count : count.count+1
-            },
-            {
-                where : {
-                    UserId : user.id,
-                    CardId : tmp
-                }
-            });
+            
+            if (count.count >= 2) {
+                duplicate.push(true);
+                await user.update({
+                    coin: user.coin + 10
+                });
+            }
+            else {
+                await UserCard.update({
+                    count : count.count+1
+                },
+                {
+                    where : {
+                        UserId : user.id,
+                        CardId : tmp
+                    }
+                });
+                
+                duplicate.push(false);
+            }
         }
         
-        return randomlist;
+        return [randomlist, duplicate, user.coin];
     }
 
     //랜덤한 카드 뽑기
@@ -61,7 +78,6 @@ class RandomService{
         let prev = 0;
         let next = 0;
         let res = '';
-
         for(let i = 0; i<this._pbt.length; i++){
             if(random >= 100){
                 res = this._card[this._pbt.length-1];

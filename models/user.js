@@ -20,6 +20,15 @@ module.exports = class User extends Sequelize.Model {
                     isInt: true,
                     min: 0,
                 }
+            },
+            coin: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 0,
+                validate: {
+                    isInt: true,
+                    min: 0,
+                }
             }
         },
             {

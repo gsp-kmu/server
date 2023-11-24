@@ -8,10 +8,12 @@ class ChangeDeck{
 
     userId:number;
     decklist:number[][]
+    name:string[]
     
-    constructor(userId:number, decklist:number[][]){
+    constructor(userId:number, decklist:number[][], name:string[]){
         this.userId = userId;
         this.decklist = decklist;
+        this.name = name;
     }
 
     async saveDeck():Promise<number> {
@@ -19,19 +21,26 @@ class ChangeDeck{
             //TODO : 유저가 구성한 덱이 실제로 유저가 소유한 카드인가? 검증
             var flag:boolean = false;
             for(let i = 1; i<=5; i++){
-                //덱이 20장이 안되면 그 덱은 저장 안함
-                if(this.decklist[i-1].length != 20){
-                    flag = true;
-                    continue;
-                }
-                //각 덱의 구성을 받아서 카드를 맵핑시켜줌.
                 const decks:any = await this.Deck.findOne({
                     where:{
-                        name:i,
+                        id:(this.userId - 1)*5 + i,
                         userId:this.userId
                     }
                 });
                 
+                await decks.update({
+                    name : this.name[i-1]
+                }
+                );
+
+                //덱이 20장이 안되면 그 덱은 저장 안함
+                console.log("deckList length: ", this.decklist[i - 1].length);
+                if(this.decklist[i-1].length != 20){
+                    flag = true;
+                    continue;
+                }
+
+                //각 덱의 구성을 받아서 카드를 맵핑시켜줌.
                 const cards:Promise<object[]> = await this.Card.findAll({
                     where:{
                         id: this.decklist[i-1]
@@ -46,9 +55,9 @@ class ChangeDeck{
                   },new Map());
                 
                 for (let [key, value] of result.entries()) {
-                    const query:any = 'UPDATE deckcard SET count = ? WHERE DeckId IN (SELECT id FROM decks WHERE UserId = ? AND name = ?) AND CardId = ?';
+                    const query:any = 'UPDATE deckcard SET count = ? WHERE DeckId IN (SELECT id FROM decks WHERE UserId = ? AND id = ?) AND CardId = ?';
                     await sequelize.query(query,{
-                        replacements: [value, this.userId, i.toString(), key]
+                        replacements: [value, this.userId, (this.userId-1)*5 + i, key]
                     });
                 }
             }

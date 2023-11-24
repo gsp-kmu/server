@@ -5,13 +5,12 @@ import { Digit } from "../../common/Digit";
 
 export class LetterOfCurse extends Ability {
     targetIndex: number;
-    targetDigit: number;
+    drawDigit: number;
     cardId: number;
-    number: number;
-    constructor(myId: number, targetIndex: number, targetDigit: number, cardId: number, number: number) {
-        super(myId);
+    constructor(myId: number, targetIndex: number, drawDigit: number, cardId: number, number: number) {
+        super(myId, number, cardId);
         this.targetIndex = targetIndex;
-        this.targetDigit = targetDigit;
+        this.drawDigit = drawDigit;
         this.cardId = cardId;
         this.number = number;
     }
@@ -21,12 +20,15 @@ export class LetterOfCurse extends Ability {
     }
 
     Use(roomClient: RoomClient) {
+        const myUser: GameUser = roomClient.GetUser(this.myId);
         const user: GameUser = roomClient.GetUser(this.targetIndex);
-        if (this.targetDigit == Digit.one) {
+        if (this.drawDigit == Digit.one) {
+            myUser.RemoveCardOne();
             user.AddCardOne(this.cardId, this.number);
         }
-        else if (this.targetDigit == Digit.ten) {
-            user.AddCardOne(this.cardId, this.number);
+        else if (this.drawDigit == Digit.ten) {
+            myUser.RemoveCardTen();
+            user.AddCardTen(this.cardId, this.number);
         }
     }
 };
