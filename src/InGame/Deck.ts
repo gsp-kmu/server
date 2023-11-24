@@ -4,7 +4,7 @@ export class Deck{
     cards: Array<number>;
     constructor(cards:Array<number>){
         this.cards = cards;
-        //this.Shuffle();
+        this.Shuffle();
     }
 
     Draw():number{
