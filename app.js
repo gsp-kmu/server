@@ -134,7 +134,7 @@ app.post("/login", async (req, res) => {
     catch (err){
         console.log(err);
         if(err == 'Nan') res.status(401).json({msg:'Non Account'});
-        else res.status(401).json({msg:'Format Error'});
+        else res.status(401).json({msg:'Unexpected Error'});
     }
 });
 
