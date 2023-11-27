@@ -1,4 +1,4 @@
-name: dev branch auto ci process script
+name: AWS CI/CD
 
 on: 
   push:
