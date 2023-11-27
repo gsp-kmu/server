@@ -1,0 +1,25 @@
+name: dev branch auto ci process script
+
+on: 
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: build
+        uses: appleboy/ssh-action@v0.1.6 
+        with:
+          host: ${{ secrets.AWS_HOST }} 
+          username: ${{ secrets.AWS_USERNAME }} 
+          key: ${{ secrets.AWS_KEY }} 
+          port: ${{ secrets.AWS_PORT }} 
+          script: | 
+            cd /GSP
+            git pull origin main
+            pm2 kill
+            npm i
+            pm2 start --name "app.js" npm -- start
