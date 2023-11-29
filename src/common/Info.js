@@ -27,6 +27,8 @@ module.exports =  class Info {
         INGAME_PLAY_SEND: 'ingame_play_send',
         INGAME_PLAY_RECV: 'ingame_play_recv',
         INGAME_SURRENDER: 'ingame_surrender',
+        INGAME_TIME_START:'ingame_time_start',
+        INGAME_TIME_END:'ingame_time_end',
         TEST:'test',
     })
 }
