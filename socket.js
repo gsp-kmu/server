@@ -74,21 +74,27 @@ module.exports = (server) => {
         });
 
         socket.on(Info.EVENT_MESSAGE.MATCH_START, async(deckIndex)=>{
-            const userState = await UserState.findOne({
-                where:{
-                    'socketId':socket.id,
-                    'state':Info.userState.Join,
-                }
-            });
+            setTimeout(()=>{
+                const userState = await UserState.findOne({
+                    where:{
+                        'socketId':socket.id,
+                        'state':Info.userState.Join,
+                    }
+                });
+    
+                if(userState != null){
+                    if(userState.state != Info.userState.Join)
+                        return;
 
-            if(userState != null){
-                if(deckIndex == "")
-                    deckIndex = 1;
-                socket.deckIndex = deckIndex;
-                console.log(socket.id, " 매칭 시작함");
-                userState.state = Info.userState.Match;
-                await userState.save();
-            }
+                    if(deckIndex == "")
+                        deckIndex = 1;
+                    socket.deckIndex = deckIndex;
+                    console.log(socket.id, " 매칭 시작함");
+                    userState.state = Info.userState.Match;
+                    await userState.save();
+                    socket.emit(Info.EVENT_MESSAGE.MATCH_START, "");
+                }
+            }, 2000);
         });
         socket.on(Info.EVENT_MESSAGE.MATCH_CANCEL, async ()=>{
             const userState = await UserState.findOne({
@@ -99,9 +105,13 @@ module.exports = (server) => {
             });
 
             if(userState != null){
+                if(userState.state != Info.Match)
+                    return;
+
                 console.log(socket.id, " 매칭 취소함");
                 userState.state = Info.userState.Join;
                 await userState.save();
+                socket.emit(Info.EVENT_MESSAGE.MATCH_CANCEL, "");
             }
         });
         socket.on("test-card", (data)=>{

@@ -37,7 +37,9 @@ export class Copy extends Ability{
 
         if(cardId == undefined)
             return;
-
+        if(this.cardId == cardId)
+            return;
+         
         const card:Card = CardFactory.GetCard(this.myId, cardId, cardData);
         card.ability.cardId = this.cardId;
         card.ability.number = this.number;

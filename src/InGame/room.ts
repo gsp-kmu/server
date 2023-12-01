@@ -7,6 +7,7 @@ import { Ability } from "./Ability/Ability";
 import { GameUser } from "./GameUser";
 import { RoomClient } from "./RoomClient";
 import { CardFactory } from "./Card/CardFactory";
+import { Timer } from "./Timer";
 import Turn from "./turn";
 import { Digit } from "../common/Digit";
 
@@ -19,6 +20,7 @@ class GameRoom implements RoomClient {
     socket1: any;
     socket2: any;
     readyCount:number;
+    timer:Timer;
 
     // user1 GameUser
     constructor(user1Id: any, user2Id:any, user1: any, user2: any, id: any, deckIndex1:string, deckIndex2:string) {
@@ -27,6 +29,7 @@ class GameRoom implements RoomClient {
         this.endAbility = [];
         this.id = id;
         this.turn = new Turn(Info.MAX_PLAYER);
+        this.timer = new Timer(20000, 40000);
         this.readyCount = 0;
 
         console.log("deckIndex1: ", deckIndex1);
@@ -82,7 +85,7 @@ class GameRoom implements RoomClient {
                 if (i == this.turn.GetTurn() && this.turn.isCurrentTurnProgress == true) {
                     if (this.turn.CheckTurnEnd() == true)
                         return;
-
+                    this.timer.Clear();
                     this.turn.NextTurn();
                     console.log(this.users[i].socketId, "해당 유저가 턴을 끝냈다고 메시지 보냄.");
                     setTimeout(()=>{
@@ -228,6 +231,7 @@ class GameRoom implements RoomClient {
             if (i == currentTurn){
                 setTimeout(()=>{
                     const card = this.users[i].Draw();
+                    this.timer.Start(this.users[i].socketId);
                     Send(this.users[i].socketId, Info.EVENT_MESSAGE.INGAME_DRAW_CARD, NetworkService.Card(card));
                     Send(this.users[i].socketId, "show_hand", this.users[i].hand.cards.toString());
                 }, 1000);

@@ -21,7 +21,7 @@ class Turn{
 
     // 턴이 설정한 MAX_TURN 보다 크면 true => 즉 턴을 다 마쳤고 게임 종료
     CheckTurnEnd(){
-        if (this.currentTurnCount/2 >= Info.MAX_TURN){
+        if (this.currentTurnCount/2 > Info.MAX_TURN){
             return true;
         }
 
