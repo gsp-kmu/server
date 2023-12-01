@@ -16,15 +16,17 @@ class MatchController {
             if (count >= 2) {
                 console.log('2명 이상 접속됨');
                 const { user1, user2 } = await this.GetUserTwoRandom(count, rows);
-
-                Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
-                Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
-
+                if(user1.state != Info.userState.Match & user2.state != Info.userState.Match)
+                    return;
+                
                 user1.state = Info.userState.Game;
                 user2.state = Info.userState.Game;
                 console.log("매칭 완료 user1, user2 Game상태 변경");
                 await user1.save();
                 await user2.save();
+
+                Send(user1.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
+                Send(user2.socketid, Info.EVENT_MESSAGE.MATCH_SUCCESS, "");
 
                 setTimeout(() => {
                     this.MatchUsers(user1, user2)
