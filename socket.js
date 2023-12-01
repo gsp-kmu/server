@@ -74,27 +74,28 @@ module.exports = (server) => {
         });
 
         socket.on(Info.EVENT_MESSAGE.MATCH_START, async(deckIndex)=>{
-            setTimeout(()=>{
-                const userState = await UserState.findOne({
-                    where:{
-                        'socketId':socket.id,
-                        'state':Info.userState.Join,
-                    }
-                });
-    
-                if(userState != null){
-                    if(userState.state != Info.userState.Join)
-                        return;
-
-                    if(deckIndex == "")
-                        deckIndex = 1;
-                    socket.deckIndex = deckIndex;
-                    console.log(socket.id, " 매칭 시작함");
-                    userState.state = Info.userState.Match;
-                    await userState.save();
-                    socket.emit(Info.EVENT_MESSAGE.MATCH_START, "");
-                }
+            await setTimeout(() => {
+                
             }, 2000);
+            const userState = await UserState.findOne({
+                where:{
+                    'socketId':socket.id,
+                    'state':Info.userState.Join,
+                }
+            });
+
+            if(userState != null){
+                if(userState.state != Info.userState.Join)
+                    return;
+
+                if(deckIndex == "")
+                    deckIndex = 1;
+                socket.deckIndex = deckIndex;
+                console.log(socket.id, " 매칭 시작함");
+                userState.state = Info.userState.Match;
+                await userState.save();
+                socket.emit(Info.EVENT_MESSAGE.MATCH_START, "");
+            }
         });
         socket.on(Info.EVENT_MESSAGE.MATCH_CANCEL, async ()=>{
             const userState = await UserState.findOne({
