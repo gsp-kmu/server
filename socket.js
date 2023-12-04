@@ -58,38 +58,23 @@ module.exports = (server) => {
             }
         });
 
-        socket.on(Info.EVENT_MESSAGE.MATCH_START, async () => {
-            const userState = await UserState.findOne({
-                where: {
-                    'socketId': socket.id,
-                    'state': Info.userState.Join,
-                }
-            });
-
-            if (userState != null) {
-                console.log(socket.id, " 매칭 시작함");
-                userState.state = Info.userState.Match;
-                await userState.save();
-            }
-        });
-
         socket.on(Info.EVENT_MESSAGE.MATCH_START, async(deckIndex)=>{
-            await setTimeout(() => {
-                
-            }, 2000);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             const userState = await UserState.findOne({
                 where:{
                     'socketId':socket.id,
                     'state':Info.userState.Join,
                 }
             });
-
-            if(userState != null){
+            
+            if(userState != undefined){
                 if(userState.state != Info.userState.Join)
                     return;
 
                 if(deckIndex == "")
                     deckIndex = 1;
+
                 socket.deckIndex = deckIndex;
                 console.log(socket.id, " 매칭 시작함");
                 userState.state = Info.userState.Match;
@@ -97,6 +82,7 @@ module.exports = (server) => {
                 socket.emit(Info.EVENT_MESSAGE.MATCH_START, "");
             }
         });
+
         socket.on(Info.EVENT_MESSAGE.MATCH_CANCEL, async ()=>{
             const userState = await UserState.findOne({
                 where:{
@@ -105,15 +91,15 @@ module.exports = (server) => {
                 }
             });
 
-            if(userState != null){
-                if(userState.state != Info.Match)
+            if (userState != undefined) {
+                if (userState.state != Info.userState.Match)
                     return;
 
                 console.log(socket.id, " 매칭 취소함");
                 userState.state = Info.userState.Join;
                 await userState.save();
                 socket.emit(Info.EVENT_MESSAGE.MATCH_CANCEL, "");
-            }
+0            }
         });
         socket.on("test-card", (data)=>{
             const card = data;
