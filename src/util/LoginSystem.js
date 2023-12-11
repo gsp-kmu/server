@@ -24,9 +24,9 @@ class LoginSystem{
         },);
 
         if (exist == null) {
-            // let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+            let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
 
-            // if (reg.test(this._password) == false) return 0;
+            if (reg.test(this._password) == false) return 0;
 
             const hash = await cryptoModule.createHash(this._password);
             const cryptedPW = hash.hashed;
